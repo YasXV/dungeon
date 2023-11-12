@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 
 typedef struct my_couloir{
-
+int longueur;
 char *sequence;
 int largeur;
 }couloir;
@@ -40,7 +40,9 @@ int count_north(const char *sequence);
 int count_west(const char *sequence);
 
 //void save(Couloir *c);
+//--------------------------------------------------------------------------------
 
+void count_max_length(couloir *c);
 
 #endif 
 

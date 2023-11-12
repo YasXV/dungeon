@@ -15,13 +15,14 @@ void init(couloir *c, int largeur, const char *sequence){
 	c->largeur = largeur;
 	c->sequence = malloc(strlen(sequence) + 1);
 	strcpy(c->sequence,sequence);
+	count_max_length(c);
+	printf("%d\n",c->longueur);
 }
 
 //--------------------------------------------------------------------------------
 
 void affiche(couloir *c){
 	for (int i=0; (c->sequence)[i] != '\0'; i++) {
-		printf("%c\n", (c->sequence)[i]);
 		int count = count_occurence_direction(c, i, (c->sequence)[i]);
 		if ((c->sequence)[i] == 'N'){
 			continue;
@@ -31,7 +32,12 @@ void affiche(couloir *c){
 				printf("# #\n");
 			}
 			else{
-				printf("#\n");
+				if ((c->sequence)[i+1] == 'E'){
+					printf("#\n");
+				}
+				else if ((c->sequence)[i+1] == 'W'){
+					printf("  #\n");
+				}
 			}
 			continue;
 		}
@@ -108,6 +114,78 @@ int count_west(const char *sequence){
 		}
 	}
 	return west;
+}
+
+//--------------------------------------------------------------------------------
+
+void count_max_length(couloir *c){
+	int max_length=0;
+	int length_sud = 0;
+	int length_nord = 0;
+	int length_total_sud = 0;
+	int length_total_nord = 0;
+	int max_length_nord = 0;
+	int max_length_sud = 0;
+	
+	char dernier_char;
+
+	for (int i=0; (c->sequence)[i] != '\0'; i++){
+		if((c->sequence)[i]=='S'){
+			length_sud++;
+			length_total_sud++;
+		}
+		else{
+			if (length_sud > max_length_sud){
+				max_length_sud = length_sud;
+				length_sud = 0;
+			}
+			else{
+				length_sud = 0;
+			}
+		}
+
+		if((c->sequence)[i]=='N'){
+			length_nord++;
+			length_total_nord++;
+		}
+		else{
+			if (length_nord > max_length_nord){
+				max_length_nord = length_nord;
+				length_nord = 0;
+			}
+			else{
+				length_nord = 0;
+			}
+		}
+		dernier_char = (c->sequence)[i];
+	}
+
+	if ((max_length_nord ==0)||(max_length_sud == 0)){
+		if (max_length_nord == 0){
+			if (dernier_char == 'S'){
+				c->longueur = length_total_sud - 1;
+			}
+			else{
+				c->longueur = length_total_sud + 1;
+			}
+		}
+		if (max_length_sud == 0){
+			if (dernier_char == 'N'){
+				c->longueur = length_total_nord - 1;
+			}
+			else{
+				c->longueur = length_total_nord + 1;
+			}
+		}
+	}
+	else{
+		if (max_length_nord > max_length_sud){
+			c->longueur = max_length_nord + 2;
+		}
+		else{
+			c->longueur = max_length_sud + 1;
+		}
+	}
 }
 
 //--------------------------------------------------------------------------------
