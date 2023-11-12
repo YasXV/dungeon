@@ -1,0 +1,5 @@
+type couloir: 
+
+sequence char!
+dimension largeur L int
+(dimension longueur l int, à voir)
