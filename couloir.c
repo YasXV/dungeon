@@ -14,8 +14,8 @@ void affiche(couloir *c){
 	for (int i=0; (c->sequence)[i] != '\0'; i++) {
 	printf("%c\n",(c->sequence)[i]);
 	}
-	printf("%d\t%d",count_north(c->sequence),count_west(c->sequence));
-	printf("\n");
+	//printf("%d\t%d",count_north(c->sequence),count_west(c->sequence));
+	//printf("\n");
 	/*printf("%s\n",c->sequence);
 	for(int i=0;i<strlen(c->sequence);i++){
 	printf("#");
@@ -26,24 +26,9 @@ void affiche(couloir *c){
 	for(int i=0;i<strlen(c->sequence);i++){
 	printf("#");
 	}
-	printf("\n");*/
+	printf("\n");
 	for (int i=0; (c->sequence)[i] != '\0'; i++){
-		switch ((c->sequence)[i]){
-		case 'E':	
-		printf("#");
-		}
-		break;
-		
-		case 'S':
-		if(i!=0 && c->sequence[i-1]!='S'){
-		printf("#");
-		}
-		else {
-		printf("#\n");
-		     }
-		break;
-		}	
-	}
+	}*/
 }
 
 void orientation(const char *sequence){
