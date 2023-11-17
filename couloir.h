@@ -10,10 +10,11 @@
 //--------------------------------------------------------------------------------
 
 typedef struct my_couloir{
-int longueur;
+int hauteur; //nombre de lignes
 char *sequence;
-int largeur;
-int width;
+int largeur; //largeur des couloirs
+int ligne; //taille de la ligne
+char **tableau;
 }couloir;
 
 //--------------------------------------------------------------------------------
@@ -26,31 +27,25 @@ void affiche(couloir *c);
 
 //--------------------------------------------------------------------------------
 
-int count_occurence_direction(couloir *c, int index, char direction);
+void fill_couloir(couloir *c);
 
 //--------------------------------------------------------------------------------
 
-void orientation(const char *sequence);
+int count_occurence(char *direction,couloir *c);
 
-//--------------------------------------------------------------------------------
-
-int count_north(const char *sequence);
-
-//--------------------------------------------------------------------------------
-
-int count_west(const char *sequence);
-
-//void save(Couloir *c);
 //--------------------------------------------------------------------------------
 
 void count_max_length(couloir *c);
 
 //--------------------------------------------------------------------------------
 
-void count_max_width(couloir *c);
+void count_max_ligne(couloir *c);
 
 //--------------------------------------------------------------------------------
 
+void create_tableau(couloir *c);
+
+//--------------------------------------------------------------------------------
 #endif 
 
 //--------------------------------------------------------------------------------

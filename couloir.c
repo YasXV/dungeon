@@ -16,171 +16,129 @@ void init(couloir *c, int largeur, const char *sequence){
 	c->sequence = malloc(strlen(sequence) + 1);
 	strcpy(c->sequence,sequence);
 	count_max_length(c);
-	count_max_width(c);
-	printf("%d\n",c->width);
+	count_max_ligne(c);
+	    // Allouer de la mémoire pour les lignes
+    c->tableau = (char**)malloc(c->hauteur * sizeof(char*));
+
+    // Allouer de la mémoire pour les colonnes
+    for (int i = 0; i < c->hauteur; i++) {
+        c->tableau[i] = (char*)malloc(c->largeur * sizeof(char));
+    }
+
+	create_tableau(c);
+	printf("%d\n",c->hauteur);
+	printf("%d\n",c->ligne);
 }
 
 //--------------------------------------------------------------------------------
 
 void affiche(couloir *c){
-	//création d'un tableau de char à remplir:
-	char tab[c->longueur][c->largeur];
-	int hauteur = 0;
-	int largeur = 0;
-	//initialisation du tableau:
-	for (int i=0; (c->sequence)[i] != '\0'; i++) {
-		int count = count_occurence_direction(c, i, (c->sequence)[i]);
-		if ((c->sequence)[i] == 'N'){
-			if (count > 1){
-				tab[c->longueur - (hauteur + 1)][largeur] = '#';
-				tab[c->longueur - (hauteur + 1)][largeur + 1] = ' ';
-				tab[c->longueur - (hauteur + 1)][largeur + 2] = '#';
-			}
-			else{
-				if ((c->sequence)[i+1] == 'E'){
-					tab[c->longueur - (hauteur + 1)][largeur] = '#';
-					tab[c->longueur - (hauteur + 1)][largeur + 1] = ' ';
-					tab[c->longueur - (hauteur + 1)][largeur + 2] = ' ';
-					tab[c->longueur - (hauteur + 2)][largeur]= '#';
-					tab[c->longueur - (hauteur + 2)][largeur + 1]= '#';
-					tab[c->longueur - (hauteur + 2)][largeur + 2]= '#';
-					largeur++;
-					largeur++;
-				}
-				else if ((c->sequence)[i+1] == 'W'){
-					tab[c->longueur - (hauteur + 1)][largeur] = ' ';
-					tab[c->longueur - (hauteur + 1)][largeur + 1] = ' ';
-					tab[c->longueur - (hauteur + 1)][largeur + 2] = '#';
-
-					tab[c->longueur - (hauteur + 2)][largeur]= '#';
-					tab[c->longueur - (hauteur + 2)][largeur + 1]= '#';
-					tab[c->longueur - (hauteur + 2)][largeur + 2]= '#';
-					largeur++;
-					largeur++;
-				}
-			}
-			hauteur++;
-		}
-		else if ((c->sequence)[i] == 'S'){
-			
-			if (count > 1){
-				tab[hauteur][largeur] = '#';
-				tab[hauteur][largeur + 1] = ' ';
-				tab[hauteur][largeur + 2] = '#';
-			}
-			else{
-				if ((c->sequence)[i+1] == 'E'){
-					tab[hauteur][largeur] = '#';
-					tab[hauteur][largeur + 1] = ' ';
-					tab[hauteur][largeur + 2] = ' ';
-					tab[hauteur + 1][largeur]= '#';
-					tab[hauteur + 1][largeur + 1]= '#';
-					tab[hauteur + 1][largeur + 2]= '#';
-					largeur++;
-					largeur++;
-				}
-				else if ((c->sequence)[i+1] == 'W'){
-					tab[hauteur][largeur] = ' ';
-					tab[hauteur][largeur + 1] = ' ';
-					tab[hauteur][largeur + 2] = '#';
-
-					tab[hauteur + 1][largeur]= '#';
-					tab[hauteur + 1][largeur + 1]= '#';
-					tab[hauteur + 1][largeur + 2]= '#';
-					largeur++;
-					largeur++;
-				}
-			}
-			hauteur++;
-		}
-		else if ((c->sequence)[i] == 'E'){
-			if (count > 1){
-				//tab[hauteur + 2][largeur + 1] = '#';
-				//tab[hauteur + 1][largeur + 1] = ' ';
-				//tab[hauteur][largeur + 1] = '#';
-			}
-			largeur++;
-			continue;
-		}
-		else if ((c->sequence)[i]=='W'){
-			largeur++;
-			continue;
-		}
-		else {
-			printf("erreur de saisie\n");
-		}
-	}
-	//affichage du tableau:
-	for (int i=0; i<c->longueur; i++){
-		for (int j=0; j<c->largeur; j++){
-			printf("%c", tab[i][j]);
-		}
-		printf("\n");
-	}
-	//printf("%d\t%d",count_north(c->sequence),count_west(c->sequence));
-	//printf("\n");
-	/*printf("%s\n",c->sequence);
-	for(int i=0;i<strlen(c->sequence);i++){
-	printf("#");
-	}
-	for(int i=1; i<=c->largeur;i++){
-		printf("\n");
-	}
-	for(int i=0;i<strlen(c->sequence);i++){
-	printf("#");
-	}
-	printf("\n");
-	for (int i=0; (c->sequence)[i] != '\0'; i++){
-	}*/
+    for (int i = 0; i < c->hauteur; i++) {
+        for (int j = 0; j < c->ligne; j++) {
+            printf("%c ", c->tableau[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 //--------------------------------------------------------------------------------
 
-int count_occurence_direction(couloir *c, int index, char direction){
-	int count_occurence = 0;
-	for (int i = index; (c->sequence)[i] != '\0'; i++){
-		if ((c->sequence)[i] == direction){
-			count_occurence++;
+void create_tableau(couloir *c){
+	for (int i = 0; i < c->hauteur; i++) {
+        for (int j = 0; j < c->ligne; j++) {
+            c->tableau[i][j] = '#';
+        }
+    }
+	fill_couloir(c);
+}
+//--------------------------------------------------------------------------------
+
+int count_occurence(char *direction,couloir *c){
+	int occurence = 0;
+	for (int i=0; (c->sequence)[i] != '\0'; i++){
+		if((c->sequence)[i] == *direction){
+			occurence++;
+		}
+	}
+	return occurence;
+}
+
+//--------------------------------------------------------------------------------
+
+void fill_couloir(couloir *c){
+	int nb_est = count_occurence("E",c);
+	int nb_west = count_occurence("W",c);
+	int nb_sud = count_occurence("S",c);
+	int nb_nord = count_occurence("N",c);
+	
+	int x = 0;
+	int y = 0;
+	if ((nb_est != 0)&&(nb_west != 0)){
+		if (nb_west == 0){
+			y = 0;
+		}
+		else if (nb_est == 0){
+			y = c->ligne - 1;
+		}
+		if ((nb_est != 0) && (nb_west != 0)){
+			if (nb_est > nb_west){
+				y = nb_est/2 - nb_west - 1;
+			}
+			else{
+				y = nb_west - nb_est - 1;
+			}
+		}
+	}
+	else{
+		if (nb_west == 0){
+			y = -1;
+		}
+		else if (nb_est == 0){
+			y = c->ligne - 1;
+		}
+	}
+	if ((nb_nord != 0)&&(nb_sud != 0)){
+		if (nb_nord > nb_sud){
+			x = nb_nord/2 - nb_sud - 1;
 		}
 		else{
-			return count_occurence;
+			x = nb_sud - nb_nord - 1;
 		}
 	}
-	return count_occurence;
-}
+	else if ((nb_nord == 0)&& (nb_sud != 0)){
+		x = -1;
+	}
+	else if ((nb_sud == 0)&&(nb_nord != 0)){
+		x = c->hauteur - 1;
+	}
+	else if ((nb_nord == 0)&&(nb_sud == 0)){
+		x = 1;
+	}
+	printf("x = %d\n",x);
+	printf("y = %d\n",y);
+    int longueurSequence = sizeof(c->sequence) - 1;
 
-//--------------------------------------------------------------------------------
+    for (int i = 0; c->sequence[i] != '\0'; i++) {
+        char direction = c->sequence[i];
 
+        if (direction == 'E') {
+            y += 1;
+        } else if (direction == 'W') {
+            y -= 1;
+        } else if (direction == 'S') {
+            x += 1;
+        } else if (direction == 'N') {
+            x -= 1;
+        }
 
-void orientation(const char *sequence){
-/*E S W N */
+        // Assurez-vous que les nouvelles coordonnées sont valides
+        if (x >= 0 && x < c->hauteur && y >= 0 && y < c->ligne) {
+            c->tableau[x][y] = ' ';
+        }
+    }
 	
 }
 
-
-//--------------------------------------------------------------------------------
-
-int count_north(const char *sequence){
-	int north=0;
-	for (int i=0; (sequence)[i] != '\0'; i++){
-		if((sequence)[i]=='N'){
-		north++;
-		}
-	}
-	return north;
-}
-
-//--------------------------------------------------------------------------------
-
-int count_west(const char *sequence){
-	int west=0;
-	for (int i=0; (sequence)[i] != '\0'; i++){
-		if((sequence)[i]=='W'){
-		west++;
-		}
-	}
-	return west;
-}
 
 //--------------------------------------------------------------------------------
 
@@ -188,8 +146,7 @@ void count_max_length(couloir *c){
 	int max_length=0;
 	int length_sud = 0;
 	int length_nord = 0;
-	int length_total_sud = 0;
-	int length_total_nord = 0;
+
 	int max_length_nord = 0;
 	int max_length_sud = 0;
 	
@@ -198,9 +155,9 @@ void count_max_length(couloir *c){
 	for (int i=0; (c->sequence)[i] != '\0'; i++){
 		if((c->sequence)[i]=='S'){
 			length_sud++;
-			length_total_sud++;
 		}
-		else{
+		else if (c->sequence[i] == 'N'){
+			length_sud++;
 			if (length_sud > max_length_sud){
 				max_length_sud = length_sud;
 				length_sud = 0;
@@ -212,9 +169,8 @@ void count_max_length(couloir *c){
 		//------------------------------------------------
 		if((c->sequence)[i] == 'N'){
 			length_nord++;
-			length_total_nord++;
 		}
-		else{
+		else if (c->sequence[i] == 'S'){
 			if (length_nord > max_length_nord){
 				max_length_nord = length_nord;
 				length_nord = 0;
@@ -226,102 +182,115 @@ void count_max_length(couloir *c){
 		dernier_char = (c->sequence)[i];
 	}
 
+	if (length_sud > max_length_sud){
+		max_length_sud = length_sud;
+	}
+	if (length_nord > max_length_nord){
+		max_length_nord = length_nord;
+	}
+
+
 	if ((max_length_nord ==0)||(max_length_sud == 0)){
-		if (max_length_nord == 0){
+		if ((max_length_nord == 0) && (max_length_sud == 0)){
+			c->hauteur = 3;
+		}
+		else if (max_length_nord == 0){
 			if (dernier_char == 'S'){
-				c->longueur = length_total_sud - 1;
+				c->hauteur = max_length_sud - 1;
 			}
 			else{
-				c->longueur = length_total_sud + 1;
+				c->hauteur = max_length_sud - 1;
 			}
 		}
-		if (max_length_sud == 0){
+		else if (max_length_sud == 0){
 			if (dernier_char == 'N'){
-				c->longueur = length_total_nord - 1;
+				c->hauteur = max_length_nord - 1;
 			}
 			else{
-				c->longueur = length_total_nord + 1;
+				c->hauteur = max_length_nord + 1;
 			}
 		}
 	}
 	else{
 		if (max_length_nord > max_length_sud){
-			c->longueur = max_length_nord + 2;
+			c->hauteur = max_length_nord + 2;
 		}
 		else{
-			c->longueur = max_length_sud + 1;
+			c->hauteur = max_length_sud + 2;
 		}
 	}
 }
 
 //--------------------------------------------------------------------------------
 
-void count_max_width(couloir *c){
-	int max_width=0;
-	int width_est = 0;
-	int width_west = 0;
-	int width_total_est = 0;
-	int width_total_west = 0;
-	int max_width_west = 0;
-	int max_width_est = 0;
+void count_max_ligne(couloir *c){
+	int ligne_est = 0;
+	int ligne_west = 0;
+
+	int max_ligne_west = 0;
+	int max_ligne_est = 0;
 	
 	char dernier_char;
 
 	for (int i=0; (c->sequence)[i] != '\0'; i++){
 		if((c->sequence)[i]=='E'){
-			width_est++;
-			width_total_est++;
+			ligne_est++;
 		}
-		else{
-			if (width_est > max_width_est){
-				max_width_est = width_est;
-				width_est = 0;
+		else if (c->sequence[i] == 'W'){
+			if (ligne_est > max_ligne_est){
+				max_ligne_est = ligne_est;
+				ligne_est = 0;
 			}
 			else{
-				width_est = 0;
+				ligne_est = 0;
 			}
 		}
 		//------------------------------------------------
-		if((c->sequence)[i] == 'N'){
-			width_west++;
-			width_total_west++;
+		if((c->sequence)[i] == 'W'){
+			ligne_west++;
 		}
-		else{
-			if (width_west > max_width_west){
-				max_width_west = width_west;
-				width_west = 0;
+		else if (c->sequence[i] == 'E'){
+			if (ligne_west > max_ligne_west){
+				max_ligne_west = ligne_west;
+				ligne_west = 0;
 			}
 			else{
-				width_west = 0;
+				ligne_west = 0;
 			}
 		}
 		dernier_char = (c->sequence)[i];
 	}
 
-	if ((max_width_west ==0)||(max_width_est == 0)){
-		if (max_width_west == 0){
+	if (ligne_est > max_ligne_est){
+		max_ligne_est = ligne_est;
+	}
+	if (ligne_west > max_ligne_west){
+		max_ligne_west = ligne_west;
+	}
+	if ((max_ligne_west ==0)||(max_ligne_est == 0)){
+		if (max_ligne_west == 0){
 			if (dernier_char == 'E'){
-				c->width = width_total_est - 1;
+				c->ligne = max_ligne_est;
 			}
 			else{
-				c->width = width_total_est + 1;
+				c->ligne = max_ligne_est + 3;
 			}
 		}
-		if (max_width_est == 0){
+		if (max_ligne_est == 0){
 			if (dernier_char == 'W'){
-				c->width = width_total_west - 1;
+				c->ligne = max_ligne_west;
 			}
 			else{
-				c->width = width_total_west + 1;
+				c->ligne = max_ligne_west + 3;
 			}
 		}
 	}
 	else{
-		if (max_width_west > max_width_est){
-			c->longueur = max_width_west + 2;
+		if (max_ligne_west > max_ligne_est){
+			c->ligne = max_ligne_west + 3;
 		}
 		else{
-			c->longueur = max_width_est + 1;
+			c->ligne = max_ligne_est + 3;
 		}
 	}
 }
