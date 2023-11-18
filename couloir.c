@@ -26,8 +26,6 @@ void init(couloir *c, int largeur, const char *sequence){
     }
 
 	create_tableau(c);
-	printf("%d\n",c->hauteur);
-	printf("%d\n",c->ligne);
 }
 
 //--------------------------------------------------------------------------------
@@ -35,7 +33,12 @@ void init(couloir *c, int largeur, const char *sequence){
 void affiche(couloir *c){
     for (int i = 0; i < c->hauteur; i++) {
         for (int j = 0; j < c->ligne; j++) {
-            printf("%c ", c->tableau[i][j]);
+			if (c->tableau[i][j] == '-'){
+				printf("  ");
+			}
+			else{
+            	printf("%c ", c->tableau[i][j]);
+			}
         }
         printf("\n");
     }
@@ -51,6 +54,7 @@ void create_tableau(couloir *c){
     }
 	fill_couloir(c);
 }
+
 //--------------------------------------------------------------------------------
 
 int count_occurence(char *direction,couloir *c){
@@ -66,59 +70,13 @@ int count_occurence(char *direction,couloir *c){
 //--------------------------------------------------------------------------------
 
 void fill_couloir(couloir *c){
-	int nb_est = count_occurence("E",c);
-	int nb_west = count_occurence("W",c);
-	int nb_sud = count_occurence("S",c);
-	int nb_nord = count_occurence("N",c);
-	
 	int x = 0;
 	int y = 0;
-	if ((nb_est != 0)&&(nb_west != 0)){
-		if (nb_west == 0){
-			y = 0;
-		}
-		else if (nb_est == 0){
-			y = c->ligne - 1;
-		}
-		if ((nb_est != 0) && (nb_west != 0)){
-			if (nb_est > nb_west){
-				y = nb_est/2 - nb_west - 1;
-			}
-			else{
-				y = nb_west - nb_est - 1;
-			}
-		}
-	}
-	else{
-		if (nb_west == 0){
-			y = -1;
-		}
-		else if (nb_est == 0){
-			y = c->ligne - 1;
-		}
-	}
-	if ((nb_nord != 0)&&(nb_sud != 0)){
-		if (nb_nord > nb_sud){
-			x = nb_nord/2 - nb_sud - 1;
-		}
-		else{
-			x = nb_sud - nb_nord - 1;
-		}
-	}
-	else if ((nb_nord == 0)&& (nb_sud != 0)){
-		x = -1;
-	}
-	else if ((nb_sud == 0)&&(nb_nord != 0)){
-		x = c->hauteur - 1;
-	}
-	else if ((nb_nord == 0)&&(nb_sud == 0)){
-		x = 1;
-	}
-	printf("x = %d\n",x);
-	printf("y = %d\n",y);
-    int longueurSequence = sizeof(c->sequence) - 1;
+	start_placement(c,&x,&y);
 
-    for (int i = 0; c->sequence[i] != '\0'; i++) {
+	int longueurSequence = strlen(c->sequence);
+
+    for (int i = 0; i < longueurSequence; i++) {
         char direction = c->sequence[i];
 
         if (direction == 'E') {
@@ -136,161 +94,160 @@ void fill_couloir(couloir *c){
             c->tableau[x][y] = ' ';
         }
     }
-	
+	//clean_tableau(c);
 }
 
+//--------------------------------------------------------------------------------
+
+void start_placement(couloir *c, int *x, int *y){
+	int nb_est = count_occurence("E",c);
+	int nb_west = count_occurence("W",c);
+	int nb_sud = count_occurence("S",c);
+	int nb_nord = count_occurence("N",c);
+	
+	//calcul de la position de départ
+	if ((nb_est == 0)&&(nb_west != 0)){
+		if (c->sequence[0] == 'W'){
+			*y = c->ligne;
+		}
+		else{
+			*y = (c->ligne) - 2;
+		}
+
+	}
+	else if ((nb_est != 0)&&(nb_west == 0)){
+		if (c->sequence[0] == 'E'){
+			*y = -1;
+		}
+		else{
+			*y = 1;
+		}
+	}
+	else{
+		if ((nb_est != 0 ) && (nb_west != 0)){
+			if (nb_est > nb_west){
+				*y = nb_est/2 - nb_west - 1;
+			}
+			else{
+				*y = c->ligne - 2;
+			}
+		}
+		else{
+			*y = 1;
+		}
+	}
+	//----------------------------------------
+	if ((nb_nord == 0)&&(nb_sud != 0)){
+		*x = -1;
+	}
+	else if ((nb_nord != 0)&&(nb_sud == 0)){
+		if (c->sequence[0] == 'N'){
+			*x = c->hauteur;
+		}
+		else{
+			*x = c->hauteur -1;
+		}
+	}
+	else{
+		if ((nb_nord != 0 ) && (nb_sud != 0)){
+			if (nb_nord > nb_sud){
+				*x = nb_nord - nb_sud - 1;
+			}
+			else{
+				*x = - 1;
+			}
+		}
+		else{
+			*x = 1;
+		}
+	}
+}
 
 //--------------------------------------------------------------------------------
 
 void count_max_length(couloir *c){
 	int max_length=0;
-	int length_sud = 0;
-	int length_nord = 0;
+	int length_sud = count_occurence("S",c);
+	int length_nord = count_occurence("N",c);
 
-	int max_length_nord = 0;
-	int max_length_sud = 0;
-	
-	char dernier_char;
-
-	for (int i=0; (c->sequence)[i] != '\0'; i++){
-		if((c->sequence)[i]=='S'){
-			length_sud++;
-		}
-		else if (c->sequence[i] == 'N'){
-			length_sud++;
-			if (length_sud > max_length_sud){
-				max_length_sud = length_sud;
-				length_sud = 0;
+	int gain = 1;
+	if ((length_sud != strlen(c->sequence)) && (length_nord != strlen(c->sequence))){
+		if ((length_sud == 0)||(length_nord == 0)){
+			if ((c->sequence[strlen(c->sequence)-1] == 'S') && (c->sequence[0] == 'S')){
+				gain = 0;
+			}
+			else if ((c->sequence[strlen(c->sequence) - 1] == 'N') && (c->sequence[0] == 'N')){
+				gain = 0;
 			}
 			else{
-				length_sud = 0;
+				gain = 1;
 			}
 		}
-		//------------------------------------------------
-		if((c->sequence)[i] == 'N'){
-			length_nord++;
-		}
-		else if (c->sequence[i] == 'S'){
-			if (length_nord > max_length_nord){
-				max_length_nord = length_nord;
-				length_nord = 0;
-			}
-			else{
-				length_nord = 0;
-			}
-		}
-		dernier_char = (c->sequence)[i];
-	}
-
-	if (length_sud > max_length_sud){
-		max_length_sud = length_sud;
-	}
-	if (length_nord > max_length_nord){
-		max_length_nord = length_nord;
-	}
-
-
-	if ((max_length_nord ==0)||(max_length_sud == 0)){
-		if ((max_length_nord == 0) && (max_length_sud == 0)){
-			c->hauteur = 3;
-		}
-		else if (max_length_nord == 0){
-			if (dernier_char == 'S'){
-				c->hauteur = max_length_sud - 1;
-			}
-			else{
-				c->hauteur = max_length_sud - 1;
-			}
-		}
-		else if (max_length_sud == 0){
-			if (dernier_char == 'N'){
-				c->hauteur = max_length_nord - 1;
-			}
-			else{
-				c->hauteur = max_length_nord + 1;
-			}
+		else{
+			gain = 1;
 		}
 	}
 	else{
-		if (max_length_nord > max_length_sud){
-			c->hauteur = max_length_nord + 2;
-		}
-		else{
-			c->hauteur = max_length_sud + 2;
-		}
+		gain = 0;
 	}
+
+	if (length_sud > length_nord){
+		max_length = length_sud + gain;
+	}
+	else{
+		max_length = length_nord + gain;
+	}
+	if ((length_sud == 0) && (length_nord == 0)){
+		max_length = 3;
+	}
+	c->hauteur = max_length;
 }
 
 //--------------------------------------------------------------------------------
 
 void count_max_ligne(couloir *c){
-	int ligne_est = 0;
-	int ligne_west = 0;
+	int max_ligne=0;
+	int ligne_est = count_occurence("E",c);
+	int ligne_west = count_occurence("W",c);
 
-	int max_ligne_west = 0;
-	int max_ligne_est = 0;
-	
-	char dernier_char;
-
-	for (int i=0; (c->sequence)[i] != '\0'; i++){
-		if((c->sequence)[i]=='E'){
-			ligne_est++;
-		}
-		else if (c->sequence[i] == 'W'){
-			if (ligne_est > max_ligne_est){
-				max_ligne_est = ligne_est;
-				ligne_est = 0;
+	int gain = 1;
+	if ((ligne_est != strlen(c->sequence)) && (ligne_west != strlen(c->sequence))){
+		if ((ligne_est == 0)||(ligne_west == 0)){
+			if ((c->sequence[strlen(c->sequence) - 1] == 'E')||(c->sequence[strlen(c->sequence) - 1] == 'W')){
+				gain = 1;
 			}
 			else{
-				ligne_est = 0;
+				gain = 3;
 			}
 		}
-		//------------------------------------------------
-		if((c->sequence)[i] == 'W'){
-			ligne_west++;
-		}
-		else if (c->sequence[i] == 'E'){
-			if (ligne_west > max_ligne_west){
-				max_ligne_west = ligne_west;
-				ligne_west = 0;
-			}
-			else{
-				ligne_west = 0;
-			}
-		}
-		dernier_char = (c->sequence)[i];
-	}
-
-	if (ligne_est > max_ligne_est){
-		max_ligne_est = ligne_est;
-	}
-	if (ligne_west > max_ligne_west){
-		max_ligne_west = ligne_west;
-	}
-	if ((max_ligne_west ==0)||(max_ligne_est == 0)){
-		if (max_ligne_west == 0){
-			if (dernier_char == 'E'){
-				c->ligne = max_ligne_est;
-			}
-			else{
-				c->ligne = max_ligne_est + 3;
-			}
-		}
-		if (max_ligne_est == 0){
-			if (dernier_char == 'W'){
-				c->ligne = max_ligne_west;
-			}
-			else{
-				c->ligne = max_ligne_west + 3;
-			}
+		else{
+			gain = 3;
 		}
 	}
 	else{
-		if (max_ligne_west > max_ligne_est){
-			c->ligne = max_ligne_west + 3;
-		}
-		else{
-			c->ligne = max_ligne_est + 3;
+		gain = 0;
+	}
+
+	if (ligne_est > ligne_west){
+		max_ligne = ligne_est + gain;
+	}
+	else{
+		max_ligne = ligne_west + gain;
+	}
+	if ((ligne_est == 0) && (ligne_west == 0)){
+		max_ligne = 3;
+	}
+	c->ligne = max_ligne;
+}
+
+//--------------------------------------------------------------------------------
+
+void clean_tableau(couloir *c){
+	for (int i = 0; i < c->hauteur; i++){
+		for (int j = 0; j < c->ligne; j++){
+			if ((c->tableau[i][j] != ' ') || (c->tableau[i+1][j] != ' ') || (c->tableau[i-1][j] != ' ') ||	(c->tableau[i][j+1] != ' ') || (c->tableau[i][j-1] != ' ') || (c->tableau[i+1][j+1] != ' ') || (c->tableau[i-1][j-1] != ' ')){
+				c->tableau[i][j] = '-';
+			}
 		}
 	}
 }

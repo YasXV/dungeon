@@ -20,16 +20,7 @@ couloir *c = malloc(sizeof(couloir));
         return 1;
     }
 
-init(c,l,"NNNNEEEENNNNNNWWWWWWNNNNNNW");
-
-// # #
-// # ####
-// #    #
-// #### ##
-//    #   
-//    ####
- 
-orientation(c->sequence);
+init(c,2,"SSSSEEEE");
 affiche(c);
 free(c);
 return 0;
