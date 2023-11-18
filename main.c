@@ -20,7 +20,7 @@ couloir *c = malloc(sizeof(couloir));
         return 1;
     }
 
-init(c,2,"SSSSEEEE");
+init(c,2,"SSSSEEEESSSSS");
 affiche(c);
 free(c);
 return 0;

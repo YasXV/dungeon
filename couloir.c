@@ -94,7 +94,7 @@ void fill_couloir(couloir *c){
             c->tableau[x][y] = ' ';
         }
     }
-	//clean_tableau(c);
+	clean_tableau(c);
 }
 
 //--------------------------------------------------------------------------------
@@ -242,15 +242,27 @@ void count_max_ligne(couloir *c){
 
 //--------------------------------------------------------------------------------
 
-void clean_tableau(couloir *c){
-	for (int i = 0; i < c->hauteur; i++){
-		for (int j = 0; j < c->ligne; j++){
-			if ((c->tableau[i][j] != ' ') || (c->tableau[i+1][j] != ' ') || (c->tableau[i-1][j] != ' ') ||	(c->tableau[i][j+1] != ' ') || (c->tableau[i][j-1] != ' ') || (c->tableau[i+1][j+1] != ' ') || (c->tableau[i-1][j-1] != ' ')){
-				c->tableau[i][j] = '-';
-			}
-		}
-	}
+void clean_tableau(couloir *c) {
+    for (int i = 0; i < c->hauteur; i++) {
+        for (int j = 0; j < c->ligne; j++) {
+            if (c->tableau[i][j] == '#') {
+                // Vérifier si la case est entourée d'espaces
+                if ((i == 0 || c->tableau[i-1][j] != ' ') &&
+                    (i == c->hauteur-1 || c->tableau[i+1][j] != ' ') &&
+                    (j == 0 || c->tableau[i][j-1] != ' ') &&
+                    (j == c->ligne-1 || c->tableau[i][j+1] != ' ') &&
+					(i == 0 || j == 0 || c->tableau[i-1][j-1] != ' ') &&
+                    (i == 0 || j == c->ligne-1 || c->tableau[i-1][j+1] != ' ') &&
+                    (i == c->hauteur-1 || j == 0 || c->tableau[i+1][j-1] != ' ') &&
+                    (i == c->hauteur-1 || j == c->ligne-1 || c->tableau[i+1][j+1] != ' ')){
+                    // Remplacer par '-'
+                    c->tableau[i][j] = '-';
+                }
+            }
+        }
+    }
 }
+
 
 //--------------------------------------------------------------------------------
 // end file
