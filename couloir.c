@@ -263,6 +263,32 @@ void clean_tableau(couloir *c) {
     }
 }
 
+//--------------------------------------------------------------------------------
+
+void sauvegarder_tableau(char *nom_fichier, couloir *c) {
+    FILE *fichier = fopen(nom_fichier, "w");
+
+    if (fichier == NULL) {
+        fprintf(stderr, "Impossible d'ouvrir le fichier %s pour l'écriture.\n", nom_fichier);
+        return;
+    }
+	fprintf(fichier, "%d\n%d\n", c->hauteur, c->ligne);
+
+    for (int i = 0; i < c->hauteur; i++) {
+        for (int j = 0; j < c->ligne; j++) {
+			if (c->tableau[i][j] == '-'){
+				fprintf(fichier, " ");
+			}
+			else{
+            	fprintf(fichier, "%c", c->tableau[i][j]);
+			}
+        }
+        fprintf(fichier, "\n");
+    }
+
+    fclose(fichier);
+	printf("Le fichier %s a été sauvegardé.\n", nom_fichier);
+}
 
 //--------------------------------------------------------------------------------
 // end file
