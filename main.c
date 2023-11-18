@@ -20,8 +20,9 @@ couloir *c = malloc(sizeof(couloir));
         return 1;
     }
 
-init(c,2,"SSSSEEEESSSSS");
+init(c,2,"SSSEEEEENNNNNNNNWWWWNNN");
 affiche(c);
+//sauvegarder_tableau("test.txt",c);
 free(c);
 return 0;
 }

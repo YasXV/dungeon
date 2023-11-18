@@ -75,7 +75,10 @@ void fill_couloir(couloir *c){
 	start_placement(c,&x,&y);
 
 	int longueurSequence = strlen(c->sequence);
-
+	int first_y;
+	int first_x;
+	int final_x;
+	int final_y;
     for (int i = 0; i < longueurSequence; i++) {
         char direction = c->sequence[i];
 
@@ -88,13 +91,28 @@ void fill_couloir(couloir *c){
         } else if (direction == 'N') {
             x -= 1;
         }
-
+		if (i == 0){
+			first_x = x;
+			first_y = y;
+		}
+		if (i == longueurSequence - 1){
+			final_x = x;
+			final_y = y;
+		}
         // Assurez-vous que les nouvelles coordonnées sont valides
         if (x >= 0 && x < c->hauteur && y >= 0 && y < c->ligne) {
             c->tableau[x][y] = ' ';
         }
     }
 	clean_tableau(c);
+	if (first_x > 0){
+		c->tableau[first_x - 1][first_y] = '-';
+	}
+	if (final_y < c->ligne - 1){
+		if (c->sequence[strlen(c->sequence) - 1] == 'E'){
+			c->tableau[final_x][final_y + 1] = '-';
+		}
+	}
 }
 
 //--------------------------------------------------------------------------------
@@ -117,7 +135,12 @@ void start_placement(couloir *c, int *x, int *y){
 	}
 	else if ((nb_est != 0)&&(nb_west == 0)){
 		if (c->sequence[0] == 'E'){
+			if (nb_est == strlen(c->sequence)){
 			*y = -1;
+			}
+			else{
+				*y=0;
+			}
 		}
 		else{
 			*y = 1;
@@ -126,7 +149,7 @@ void start_placement(couloir *c, int *x, int *y){
 	else{
 		if ((nb_est != 0 ) && (nb_west != 0)){
 			if (nb_est > nb_west){
-				*y = nb_est/2 - nb_west - 1;
+				*y = 1;
 			}
 			else{
 				*y = c->ligne - 2;
@@ -151,10 +174,18 @@ void start_placement(couloir *c, int *x, int *y){
 	else{
 		if ((nb_nord != 0 ) && (nb_sud != 0)){
 			if (nb_nord > nb_sud){
-				*x = nb_nord - nb_sud - 1;
+				*x = nb_nord - nb_sud;
+			}
+			else if (nb_nord == nb_sud){
+				*x = nb_nord - nb_sud;
 			}
 			else{
-				*x = - 1;
+				if (c->sequence[0] == 'S'){
+					*x = - 1;
+				}
+				else{
+					*x = 0;
+				}
 			}
 		}
 		else{
@@ -184,13 +215,33 @@ void count_max_length(couloir *c){
 			}
 		}
 		else{
-			gain = 1;
+			if (length_sud == length_nord){
+				if ((c->sequence[strlen(c->sequence) - 1] == 'E') ||(c->sequence[strlen(c->sequence) - 1] == 'W')){
+					gain = 3;
+				}
+				else{
+					gain = 1;
+				}
+			}
+			else if (length_sud > length_nord){
+				if (c->sequence[0]=='S'){
+					gain = 1;
+				}
+				else{
+					gain = 2;
+				}
+			}
+			else if (length_sud < length_nord){
+				gain = 2;
+			}
 		}
 	}
 	else{
 		gain = 0;
 	}
 
+
+	//--------------------------------------------------------------------------------
 	if (length_sud > length_nord){
 		max_length = length_sud + gain;
 	}
@@ -213,8 +264,8 @@ void count_max_ligne(couloir *c){
 	int gain = 1;
 	if ((ligne_est != strlen(c->sequence)) && (ligne_west != strlen(c->sequence))){
 		if ((ligne_est == 0)||(ligne_west == 0)){
-			if ((c->sequence[strlen(c->sequence) - 1] == 'E')||(c->sequence[strlen(c->sequence) - 1] == 'W')){
-				gain = 1;
+			if ((c->sequence[strlen(c->sequence) - 1] == 'E') || (c->sequence[strlen(c->sequence) - 1] == 'W')){
+				gain = 3;
 			}
 			else{
 				gain = 3;
@@ -223,10 +274,11 @@ void count_max_ligne(couloir *c){
 		else{
 			gain = 3;
 		}
-	}
+	}//--------------------------------------------------------------------------------
 	else{
 		gain = 0;
 	}
+
 
 	if (ligne_est > ligne_west){
 		max_ligne = ligne_est + gain;
