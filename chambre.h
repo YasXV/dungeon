@@ -9,11 +9,15 @@ int longueur;
 int id_salle;
 }salle;
 
-void init_salle(salle *s, int largeur, int longueur);
+typedef salle* a_salle;
+
+a_salle creer_salle(int largeur, int longueur);
 
 void affiche_salle(salle *s);
 
-void sauvegarder_salle(salle *s);
+int sauvegarder_salle(salle *s);
+
+a_salle recup_salle(char* nom_fichier);
 
 
 

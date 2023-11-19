@@ -11,26 +11,46 @@
 
 //--------------------------------------------------------------------------------
 
-void init(couloir *c, int largeur, const char *sequence){
+//Variable statique pour maintenir le dernier identifiant attribué
+static int dernierIdAttribue_couloir = 0;
+
+a_couloir creer_couloir(int largeur, const char *sequence){
+	
+	//allocation de la mémoire pour un couloir
+	a_couloir c = malloc(sizeof(couloir));
+	if (c == NULL) {
+        printf("échec de l'allocation de mémoire d'un couloir");
+        return NULL;
+    	}
+    
+    //dimension
 	c->largeur = largeur;
+	
+	//allocation de la mémoire pour la sequence
 	c->sequence = malloc(strlen(sequence) + 1);
 	strcpy(c->sequence,sequence);
 	count_max_length(c);
 	count_max_ligne(c);
-	    // Allouer de la mémoire pour les lignes
+	
+	//Allouer de la mémoire pour les lignes
     c->tableau = (char**)malloc(c->hauteur * sizeof(char*));
 
-    // Allouer de la mémoire pour les colonnes
+    //Allouer de la mémoire pour les colonnes
     for (int i = 0; i < c->hauteur; i++) {
         c->tableau[i] = (char*)malloc(c->largeur * sizeof(char));
     }
-
+    
+	// attribution de l'identifiant 
+	if (c != NULL) {
+        	c->id_couloir = ++dernierIdAttribue_couloir;
+    	}
 	create_tableau(c);
+	return c;
 }
 
 //--------------------------------------------------------------------------------
 
-void affiche(couloir *c){
+void affiche_couloir(couloir *c){
     for (int i = 0; i < c->hauteur; i++) {
         for (int j = 0; j < c->ligne; j++) {
 			if (c->tableau[i][j] == '-'){
@@ -274,7 +294,7 @@ void count_max_ligne(couloir *c){
 		else{
 			gain = 3;
 		}
-	}//--------------------------------------------------------------------------------
+	}
 	else{
 		gain = 0;
 	}
@@ -317,15 +337,26 @@ void clean_tableau(couloir *c) {
 
 //--------------------------------------------------------------------------------
 
-void sauvegarder_tableau(char *nom_fichier, couloir *c) {
-    FILE *fichier = fopen(nom_fichier, "w");
-
+int sauvegarder_couloir(couloir *c) {
+    FILE *fichier;
+    
+    //création du nom du fichier en utilisant l'id du couloir
+	char nom_fichier[50];
+	sprintf(nom_fichier,"couloirs/couloir%d.txt",c->id_couloir);
+	
+	//ouverture du fichier 
+	fichier = fopen(nom_fichier,"w+");
+	
+	//erreur d'ouverture 
     if (fichier == NULL) {
         fprintf(stderr, "Impossible d'ouvrir le fichier %s pour l'écriture.\n", nom_fichier);
-        return;
+        return 1;
     }
+    
+    //écriture des dimensions en largeur et longueur des couloirs
 	fprintf(fichier, "%d\n%d\n", c->hauteur, c->ligne);
 
+	//écriture du couloir 
     for (int i = 0; i < c->hauteur; i++) {
         for (int j = 0; j < c->ligne; j++) {
 			if (c->tableau[i][j] == '-'){
@@ -340,6 +371,7 @@ void sauvegarder_tableau(char *nom_fichier, couloir *c) {
 
     fclose(fichier);
 	printf("Le fichier %s a été sauvegardé.\n", nom_fichier);
+	return 0;
 }
 
 //--------------------------------------------------------------------------------
