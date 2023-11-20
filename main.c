@@ -10,6 +10,7 @@
 #include "couloir.h" 
 #include "chambre.h"
 #include <time.h>
+#include "entites.h"
 
 //--------------------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ sauvegarder_couloir(c1);
 
 a_couloir c2 = creer_couloir(2,"NNNNNNNWWWWW");
 affiche_couloir(c2);
-sauvegarder_couloir(c2);*/
+sauvegarder_couloir(c2);
 
 a_salle s3 = recup_salle("chambres/salle1.txt");
 //printf("%d\n%d\n",s3->largeur,s3->longueur);
@@ -41,7 +42,14 @@ printf("%d\n",s3->id_salle);
 //free(c1);
 //free(s2);
 free(s3);
-free(s1);
+free(s1);*/
+a_entite m1 = creer_entite(MONSTRE,5,8,1);
+a_entite b1 = creer_entite(BOSS,10,6,0);
+printf("%c\t(%d,%d)\n",m1->symbole,m1->x,m1->y);
+printf("%c\t(%d,%d)\n",b1->symbole,b1->x,b1->y);
+printf("%d\n", MONSTRE);
+printf("%s\n",avoir_type_entite(m1));
+printf("%s\n",avoir_type_entite(b1));
 return 0;
 }
 
