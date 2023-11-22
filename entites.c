@@ -13,89 +13,93 @@ a_entite creer_entite(entite_id id, int x, int y, int interaction){
 		printf("échec de l'allocation de mémoire d'une entite");
 		return NULL;
 	}
-	else {
-		nouvelle_entite->interaction = interaction;
-		nouvelle_entite->x = x;
-		nouvelle_entite->y = y;
-		nouvelle_entite->id_entite = id;
+	nouvelle_entite->interaction = interaction;
+	nouvelle_entite->x = x;
+	nouvelle_entite->y = y;
+	nouvelle_entite->id_entite = id;
+	
+	//differenciation des differents types d'entites
+	switch(id){
+		case MONSTRE:
+			if(interaction==0){
+				nouvelle_entite->symbole ='M';
+			}
+			else{
+				nouvelle_entite->symbole ='w';
+				}
+			break;
 		
-		//differenciation des differents types d'entites
-		switch(id){
-			case MONSTRE:
-				if(interaction==0){
-					nouvelle_entite->symbole ='M';
+		case BOSS:
+			if(interaction ==0){
+				nouvelle_entite->symbole ='B';
+			}
+			else{
+				nouvelle_entite->symbole ='W';
 				}
-				else{
-					nouvelle_entite->symbole ='w';
-					}
-				break;
-			
-			case BOSS:
-				if(interaction ==0){
-					nouvelle_entite->symbole ='B';
+			break;
+		
+		case COFFRE:
+			if(interaction==0){
+				nouvelle_entite->symbole ='C';
+			}
+			else{
+				nouvelle_entite->symbole ='U';
 				}
-				else{
-					nouvelle_entite->symbole ='W';
-					}
-				break;
+			break;
+		
+		case ENTREE:
+			nouvelle_entite->symbole ='E';
+			break;
 			
-			case COFFRE:
-				if(interaction==0){
-					nouvelle_entite->symbole ='C';
-				}
-				else{
-					nouvelle_entite->symbole ='U';
-					}
-				break;
-			
-			case ENTREE:
-				nouvelle_entite->symbole ='E';
-				break;
-				
-			case SORTIE:
+		case SORTIE:
+			if(interaction==0){//une sortie peut être fermée, exemple : on doit ouvrir la porte en récupérant une clé sur un boss d'une certaine chambre)
 				nouvelle_entite->symbole ='S';
-				break;
-				
-			case AUTEL:
-				if(interaction==0){
-					nouvelle_entite->symbole ='A';
+			}
+			else{
+				nouvelle_entite->symbole ='s';
 				}
-				else{
-					nouvelle_entite->symbole ='a';
-					}
-				break;
-				
-			case PORTE:
-				if(interaction==0){
-					nouvelle_entite->symbole ='F';
+			break;
+			break;
+			
+		case AUTEL:
+			if(interaction==0){
+				nouvelle_entite->symbole ='A';
+			}
+			else{
+				nouvelle_entite->symbole ='a';
 				}
-				else{
-					nouvelle_entite->symbole ='O';
-					}
-				break;
-				
-			case PIEGE:
-				if(interaction==0){
-					nouvelle_entite->symbole ='P';
+			break;
+			
+		case PORTE:
+			if(interaction==0){
+				nouvelle_entite->symbole ='F';
+			}
+			else{
+				nouvelle_entite->symbole ='O';
 				}
-				else{
-					nouvelle_entite->symbole ='p';
-					}
-				break;
-				
-			case MUR:
-				nouvelle_entite->symbole ='#';
-				break;
+			break;
+			
+		case PIEGE:
+			if(interaction==0){
+				nouvelle_entite->symbole ='P';
+			}
+			else{
+				nouvelle_entite->symbole ='p';
+				}
+			break;
+			
+		case MUR:
+			nouvelle_entite->symbole ='#';
+			break;
 
-			default:
-				printf("Type d'entité non reconnue. Veuillez réessayer.\n");
-				return NULL;
-		}
-		return nouvelle_entite;
+		default:
+			printf("Type d'entité non reconnue. Veuillez réessayer.\n");
+			return NULL;
 	}
+	return nouvelle_entite;
 }
 
-// retourne un char* contenat le type d'entité 
+// retourne un char* indiquant le type d'entité 
 char* avoir_type_entite(a_entite mon_entite){
 	//tableau permettant de retrouver textuellement le type d'entité
 	char* entite_nom[NB_ENTITE]={"ENTREE", "SORTIE", "PORTE", "AUTEL","PIEGE","MUR","COFFRE","MONSTRE","BOSS"};
