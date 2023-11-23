@@ -23,7 +23,14 @@ ajout_entite(COFFRE, s1,3,5, 0);
 ajout_entite(AUTEL, s1, 8,3, 1);
 ajout_entite(PORTE,s1,0,4,0);
 affiche_salle(s1);
-sauvegarder_salle(s1);
+affiche_entites_salle(s1);
+ajout_entite(BOSS,s1,0,4,0);
+affiche_salle(s1);
+printf("verif :\n");
+ajout_entite(PORTE,s1,13,17,1);
+affiche_salle(s1);
+affiche_entites_salle(s1);
+/*sauvegarder_salle(s1);
 affiche_entites_salle(s1);
 printf("vérification\n");
 a_salle s3 = recup_salle("chambres/salle1.txt");
@@ -34,7 +41,7 @@ ajout_entite(PIEGE,s3,4,15,0);
 ajout_entite(MONSTRE,s3,6,12,1);
 affiche_entites_salle(s3);
 affiche_salle(s3);
-sauvegarder_salle(s3);
+sauvegarder_salle(s3);*/
 /*
 a_salle s2 = creer_salle(43,16);
 affiche_salle(s2);

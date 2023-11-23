@@ -6,17 +6,89 @@
 #include <stdlib.h>
 
 
-
-// ajouter une entité dans une salle
+//ajouter une entité dans une salle
 void ajout_entite(entite_id mon_entite_id, a_salle ma_salle, int x, int y, int interaction){
-	//création de l'entité
-	a_entite nouvelle_entite = creer_entite(mon_entite_id, x, y, interaction);
 	
-	// ajout de cette entité dans le tableau d'entité lié à la salle
-	ajout_tableau_entite(nouvelle_entite, ma_salle);
+	// calcul de entite_presente, qui vérifie si il y a déjà une entité présente ou non à la position x,y
+	int present = entite_presente(ma_salle, x, y);
 	
-	// ajout du symbole de l'entité dans l'enceinte de la salle
-	ma_salle->enceinte[y][x]=nouvelle_entite->symbole;
+	// calcul de verifier_possibilite_ajout, retourne 0 si l'ajout de l'entité est possible à cette postion dans la salle 	
+	int possible = verifier_possibilite_ajout(mon_entite_id, ma_salle, x, y, interaction);
+
+	//cas où il n'y a pas dèjà une entité en x,y
+	if(present==-1){	
+		if(possible==0){
+			//création de l'entité
+			a_entite nouvelle_entite = creer_entite(mon_entite_id, x, y, interaction);
+			
+			// ajout de cette entité dans le tableau d'entité lié à la salle
+			ajout_tableau_entite(nouvelle_entite, ma_salle);
+			
+			// ajout du symbole de l'entité dans l'enceinte de la salle
+			ma_salle->enceinte[y][x]=nouvelle_entite->symbole;
+			}
+		}
+	
+	//cas où il y a dèjà une entité en x,y
+	else {
+		if(possible==0){
+			char reponse;
+			printf("Attention il y a déjà une entité à l'emplacemant (%d,%d), voulez-vous l'écraser ? (O/n) ",x,y);
+			scanf("%c",&reponse);
+			if(reponse=='O'){
+				free(ma_salle->entites_contenu[present]);
+				// je cree la nouvelle entité
+				a_entite nouvelle_entite = creer_entite(mon_entite_id, x, y, interaction);
+				
+				//je place l'entité à l'endroit où était l'ancienne entité si écrasement
+				ma_salle->entites_contenu[present]=nouvelle_entite;
+				
+				// ajout du symbole de l'entité dans l'enceinte de la salle
+				ma_salle->enceinte[y][x]=nouvelle_entite->symbole;
+				}
+
+			else {
+				printf("Vous avez choisi de ne rien modifier.\n");
+				}	
+			}
+		}
+}
+
+
+//vérifie si une entité est déjà présente à la position x,y dans la salle 
+int entite_presente(a_salle ma_salle, int x, int y){
+	for(int i =0;i<ma_salle->nbre_elements; i++){
+		if(ma_salle->entites_contenu[i]->x==x && ma_salle->entites_contenu[i]->y==y){
+			return i;
+			}    
+	}
+	return -1;
+}
+
+//vérification sur l'ajour d'une entité dans la salle (une porte doit être ajoutéee sur un mur obligatoirement, les autres entités doivent être ajoutées hors des murs)
+int verifier_possibilite_ajout(entite_id mon_entite_id, a_salle ma_salle, int x, int y, int interaction){
+
+	//cas d'ajout d'une porte
+	if(mon_entite_id==PORTE){
+		if(y>0 && y<ma_salle->longueur-1 && x>0 && x<ma_salle->largeur-1){
+			printf("Vous essayez d'ajouter une porte hors d'un mur. Aucune modification apportée.\n");
+			return 1;
+			}
+		else{
+			return 0;
+			}
+	}
+	
+	//cas d'ajout des autres entités
+	else {
+		if(x==0 || y==0 || x== ma_salle->longueur-1 || y==ma_salle->largeur-1){
+			printf("Vous essayez d'ajouter une entité, qui n'est pas une porte, dans un mur. Aucune modification apportée.\n");
+			return 1;
+			}
+		else{
+			return 0;
+			}	
+		}
 }
 
 

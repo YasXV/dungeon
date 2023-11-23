@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-//une seule fonction qui peut crée n'importe qu'elle type d'entité, en fonction du entite_id donné, x et y sont les postions relatifs à la chambre! intercation est un int qui vaut 1 ou 0 
+//une seule fonction qui peut crée n'importe qu'elle type d'entité, en fonction du entite_id donné, x et y sont les postions relatifs à la chambre! interaction est un int qui vaut 1 ou 0 
 // 1 veut dire que nous avon dékà interagis avec cette entité (exemple coffre ouvert, monstre mort, porte ouverte) 0 nous n'avons pas interagis ! 
 a_entite creer_entite(entite_id id, int x, int y, int interaction){
 
@@ -105,6 +105,13 @@ char* avoir_type_entite(a_entite mon_entite){
 	char* entite_nom[NB_ENTITE]={"ENTREE", "SORTIE", "PORTE", "AUTEL","PIEGE","MUR","COFFRE","MONSTRE","BOSS"};
 	char* nom = entite_nom[mon_entite->id_entite];
 	return nom;
-}	
-			
+}
+
+//affiche une entité avec ses propriétes
+void affiche_entite(a_entite mon_entite){
+	printf("type : %s | interaction : %d | position: (%d,%d)\n",
+		avoir_type_entite(mon_entite), mon_entite->interaction, 
+		mon_entite->x, mon_entite->y
+		);	
+}			
 			

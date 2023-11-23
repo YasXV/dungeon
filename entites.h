@@ -29,8 +29,13 @@ NB_ENTITE
 }entite_id;
 
 
-// fonction permettant de créer une entité, le type d'entité est déterminer par son id à la l'intérieur de la structure
+// fonction permettant de créer une entité, le type d'entité est déterminer par son id à l'intérieur de la structure
 a_entite creer_entite(entite_id id, int x, int y,int interaction);
 
+// retourne un char* décrivant le type de l'entite via l'id 
 char* avoir_type_entite(a_entite mon_entite);
+
+//affiche une entité avec ses propriétes
+void affiche_entite(a_entite mon_entite);
+
 #endif

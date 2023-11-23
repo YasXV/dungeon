@@ -94,11 +94,8 @@ void affiche_salle(salle *s){
 void affiche_entites_salle(a_salle ma_salle){
 	printf("Nombre d'entités contenu dans la salle : %d\n",ma_salle->nbre_elements);
 	for(int i=0;i<ma_salle->nbre_elements;i++){
-		printf("type : %s | interaction : %d | position: (%d,%d)\n",
-		avoir_type_entite(ma_salle->entites_contenu[i]), (ma_salle->entites_contenu[i])->interaction, 
-		(ma_salle->entites_contenu[i])->x,(ma_salle->entites_contenu[i])->y
-		);
-	}
+		affiche_entite(ma_salle->entites_contenu[i]);
+		}
 }
 
 //--------------------------------------------------------------------------------
