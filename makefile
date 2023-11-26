@@ -1,8 +1,9 @@
-%.o: %.c
+fichiers_o/%.o: fichiers_c/%.c
 	gcc -o $@ -c $<
 
-dungeon:couloir.o entites.o chambre.o assemblage_chambre.o fonctions_utiles.o donjon.o  main.o
-	gcc couloir.o chambre.o entites.o assemblage_chambre.o main.o fonctions_utiles.o donjon.o -lm -o dungeon
+dungeon:fichiers_o/couloir.o fichiers_o/entites.o fichiers_o/chambre.o fichiers_o/assemblage_chambre.o fichiers_o/fonctions_utiles.o fichiers_o/donjon.o  main.o
+	gcc fichiers_o/couloir.o fichiers_o/entites.o fichiers_o/chambre.o fichiers_o/assemblage_chambre.o fichiers_o/fonctions_utiles.o fichiers_o/donjon.o main.o -lm -o donjon
 	rm *.o
-	./dungeon
-	rm dungeon
+	rm fichiers_o/*.o
+	./donjon
+	rm donjon

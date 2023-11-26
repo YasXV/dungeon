@@ -8,12 +8,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "fonctions_utiles.h"
-#include "couloir.h" 
-#include "chambre.h"
-#include "entites.h"
-#include "assemblage_chambre.h"
-#include "donjon.h"
+#include "fichiers_h/fonctions_utiles.h"
+#include "fichiers_h/couloir.h" 
+#include "fichiers_h/chambre.h"
+#include "fichiers_h/entites.h"
+#include "fichiers_h/assemblage_chambre.h"
+#include "fichiers_h/donjon.h"
 
 
 //--------------------------------------------------------------------------------
