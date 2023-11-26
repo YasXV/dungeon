@@ -4,12 +4,12 @@
 // Date: 19 Nov 2023
 //--------------------------------------------------------------------------------
 
-#include "../fichiers_h/chambre.h"
+#include "chambre.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../fichiers_h/entites.h"
-#include "../fichiers_h/fonctions_utiles.h"
+#include "entites.h"
+#include "fonctions_utiles.h"
 //--------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------

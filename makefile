@@ -1,9 +1,22 @@
-fichiers_o/%.o: fichiers_c/%.c
-	gcc -o $@ -c $<
+HEADER = fichiers_h
+SRC_DIR = fichiers_c
+OBJ_DIR = fichiers_o
+BIN_DIR = .
 
-dungeon:fichiers_o/couloir.o fichiers_o/entites.o fichiers_o/chambre.o fichiers_o/assemblage_chambre.o fichiers_o/fonctions_utiles.o fichiers_o/donjon.o  main.o
-	gcc fichiers_o/couloir.o fichiers_o/entites.o fichiers_o/chambre.o fichiers_o/assemblage_chambre.o fichiers_o/fonctions_utiles.o fichiers_o/donjon.o main.o -lm -o donjon
-	rm *.o
-	rm fichiers_o/*.o
-	./donjon
-	rm donjon
+SRCS = $(filter-out $(SRC_DIR)/main.c, $(wildcard $(SRC_DIR)/*.c))
+
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+
+MAIN_SRC = main.c
+
+MAIN_OBJ = $(OBJ_DIR)/main.o
+
+donjon: $(OBJS) $(MAIN_OBJ)
+	gcc $^ -o $(BIN_DIR)/$@ -lm
+	$(BIN_DIR)/$@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	gcc -o $@ -c $< -I$(HEADER)
+
+$(MAIN_OBJ): $(MAIN_SRC)
+	gcc -o $@ -c $< -I$(HEADER)
