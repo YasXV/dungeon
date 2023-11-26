@@ -1,4 +1,4 @@
-#include "../fichiers_h/entites.h"
+#include "entites.h"
 #include <stdio.h>
 #include <stdlib.h>
 

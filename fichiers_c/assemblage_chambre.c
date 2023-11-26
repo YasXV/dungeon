@@ -1,7 +1,7 @@
-#include "../fichiers_h/fonctions_utiles.h"
-#include "../fichiers_h/assemblage_chambre.h"
-#include "../fichiers_h/entites.h"
-#include "../fichiers_h/chambre.h"
+#include "fonctions_utiles.h"
+#include "assemblage_chambre.h"
+#include "entites.h"
+#include "chambre.h"
 #include <stdio.h>
 #include <stdlib.h>
 
