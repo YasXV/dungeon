@@ -4,10 +4,10 @@
 // Date: 12 Nov 2023
 //--------------------------------------------------------------------------------
 
-#include "../fichiers_h/couloir.h"
+#include "couloir.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../fichiers_h/fonctions_utiles.h"
+#include "fonctions_utiles.h"
 #include <string.h>
 
 //--------------------------------------------------------------------------------
@@ -357,21 +357,47 @@ int sauvegarder_couloir(couloir *c) {
 	fprintf(fichier, "%d\n%d\n", c->hauteur, c->ligne);
 
 	//écriture du couloir 
-    for (int i = 0; i < c->hauteur; i++) {
-        for (int j = 0; j < c->ligne; j++) {
-			if (c->tableau[i][j] == '-'){
-				fprintf(fichier, " ");
-			}
-			else{
-            	fprintf(fichier, "%c", c->tableau[i][j]);
-			}
-        }
-        fprintf(fichier, "\n");
-    }
-
+	fprintf(fichier, "%s\n", c->sequence);
+	
+	//fermeture du fichier
     fclose(fichier);
 	printf("Le fichier %s a été sauvegardé.\n", nom_fichier);
 	return 0;
+}
+
+//--------------------------------------------------------------------------------
+
+a_couloir recuperer_couloir(char *nom_fichier) {
+	FILE *fichier;
+	int hauteur;
+	int largeur;
+	char *sequence;
+	
+	//ouverture du fichier 
+	fichier = fopen(nom_fichier, "r");
+	
+	//erreur d'ouverture 
+	if (fichier == NULL) {
+		fprintf(stderr, "Impossible d'ouvrir le fichier %s pour la lecture.\n", nom_fichier);
+		return NULL;
+	}
+	
+	//lecture des dimensions en largeur et longueur des couloirs
+	fscanf(fichier, "%d\n%d\n", &hauteur, &largeur);
+	
+	//lecture du couloir 
+	fscanf(fichier, "%s\n", &sequence);
+	
+	//fermeture du fichier
+	fclose(fichier);
+	
+	//création du couloir
+	a_couloir c = creer_couloir(1, sequence);
+	
+	//libération de la mémoire
+	free(sequence);
+	
+	return c;
 }
 
 //--------------------------------------------------------------------------------
