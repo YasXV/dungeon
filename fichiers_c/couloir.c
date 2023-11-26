@@ -44,6 +44,7 @@ a_couloir creer_couloir(int largeur, const char *sequence){
 	   	c->id_couloir = ++nouveau_id;
 	   	mettre_ajour_int("couloirs/config.txt", c->id_couloir);
 	}
+
 	create_tableau(c);
 	return c;
 }
@@ -367,7 +368,7 @@ int sauvegarder_couloir(couloir *c) {
 
 //--------------------------------------------------------------------------------
 
-a_couloir recuperer_couloir(char *nom_fichier) {
+a_couloir recuperer_couloir(char* nom_fichier) {
 	FILE *fichier;
 	int hauteur;
 	int largeur;
@@ -386,7 +387,7 @@ a_couloir recuperer_couloir(char *nom_fichier) {
 	fscanf(fichier, "%d\n%d\n", &hauteur, &largeur);
 	
 	//lecture du couloir 
-	fscanf(fichier, "%s\n", &sequence);
+	fscanf(fichier, "%s\n", sequence);
 	
 	//fermeture du fichier
 	fclose(fichier);
