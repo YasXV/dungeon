@@ -6,7 +6,6 @@
 
 #ifndef COULOIR_H
 #define COULOIR_H
-
 //--------------------------------------------------------------------------------
 
 typedef struct my_couloir{

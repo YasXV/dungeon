@@ -7,26 +7,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#include "fonctions_utiles.h"
 #include "couloir.h" 
 #include "chambre.h"
-#include <time.h>
 #include "entites.h"
 #include "assemblage_chambre.h"
+#include "donjon.h"
+
 
 //--------------------------------------------------------------------------------
-
+//initialisation des id
 #define l 1// n est la largeur des couloirs, ici ils seront définis à 1, mais c'est tout a fait possible d'avoir une largeur personalisée
 int main(){
-
-a_salle s1 = creer_salle(10,22);
-ajout_entite(COFFRE, s1,3,5, 0);
-ajout_entite(AUTEL, s1, 8,3, 1);
-ajout_entite(PORTE,s1,0,4,0);
+a_donjon d1 = creer_donjon(67,90);
+affiche_donjon(d1);
+sauvegarder_donjon(d1);
+/*a_salle s1 = creer_salle(31,15);
+ajouter_entite(COFFRE, s1,3,5, 0,1);
+ajouter_entite(AUTEL, s1, 8,3, 1,1);
+//ajout_entite(PORTE,s1,0,4,0);
+ajouter_entite(MONSTRE,s1,0,4,1,0);
 affiche_salle(s1);
 affiche_entites_salle(s1);
-ajout_entite(BOSS,s1,0,4,0);
+interagir_entite(s1, 3,8);
+interagir_entite(s1, 3,5);
+interagir_entite(s1, 8,3);
+ajouter_entite(PIEGE,s1,3,5,0,1);
+ajouter_entite(PORTE,s1,5,0,1,0);
+ajouter_entite(PORTE,s1,5,0,0,1);
+affiche_salle(s1);
+affiche_entites_salle(s1);
+sauvegarder_salle(s1);
+printf("VERIFICATION\n");
+a_salle s2 = recup_salle("chambres/salle1.txt");
+affiche_salle(s2);
+sauvegarder_salle(s2);
+a_couloir c1 = creer_couloir(2, "SSSSSSWWWWWWWW");
+affiche_couloir(c1);
+sauvegarder_couloir(c1);
+/*ajout_entite(BOSS,s1,0,4,0);
 affiche_salle(s1);
 printf("verif :\n");
+ajout_entite(PORTE,s1,0,4,1);
 ajout_entite(PORTE,s1,13,17,1);
 affiche_salle(s1);
 affiche_entites_salle(s1);

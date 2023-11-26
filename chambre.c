@@ -20,7 +20,7 @@ a_salle creer_salle(int largeur, int longueur){
 	//allocation de la mémoire pour la salle 	
 	a_salle s = malloc(sizeof(salle));
 	if (s == NULL) {
-        printf("échec de l'allocation de mémoire d'une salle");
+        fprintf(stderr,"échec de l'allocation de mémoire d'une salle");
         return NULL;
     	}
     
@@ -42,9 +42,9 @@ a_salle creer_salle(int largeur, int longueur){
 	
 	// attribution de l'identifiant et mise à jour dans le fichier de configuration externe
 	if (s != NULL) {
-		int nouveau_id = lire_int("config.txt");
+		int nouveau_id = lire_int("chambres/config.txt");
 	   	s->id_salle = ++nouveau_id;
-	   	mettre_ajour_int("config.txt", s->id_salle);
+	   	mettre_ajour_int("chambres/config.txt", s->id_salle);
 	}
 		
 	//remplissage des murs
@@ -78,10 +78,10 @@ void remplir_mur_salle(a_salle salle){
 //--------------------------------------------------------------------------------
 
 //afficher la salle dans le terminal
-void affiche_salle(salle *s){
-    for (int i = 0; i < s->longueur; i++) {
-        for (int j = 0; j < s->largeur; j++) {
-            printf("%c", (s->enceinte)[i][j]);
+void affiche_salle(a_salle ma_salle){
+    for (int i = 0; i < ma_salle->longueur; i++) {
+        for (int j = 0; j < ma_salle->largeur; j++) {
+            printf("%c", (ma_salle->enceinte)[i][j]);
         }
         printf("\n");
     }
@@ -132,14 +132,14 @@ int sauvegarder_salle(a_salle s){
 		);
 	}
 	
-	//écriture de la salle dans le fichier crée	
+	/*//écriture de la salle dans le fichier crée	
 	for (int i = 0; i < s->longueur; i++) {
         for (int j = 0; j < s->largeur; j++) {
             	fprintf(fichier,"%c", (s->enceinte)[i][j]);
         }
         fprintf(fichier,"\n");
     	}
-    fprintf(fichier,"\n");
+    fprintf(fichier,"\n");*/
     
     //fermeture du fichier 
     fclose(fichier);

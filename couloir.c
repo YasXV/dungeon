@@ -7,12 +7,10 @@
 #include "couloir.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "fonctions_utiles.h"
 #include <string.h>
 
 //--------------------------------------------------------------------------------
-
-//Variable statique pour maintenir le dernier identifiant attribué
-static int dernierIdAttribue_couloir = 0;
 
 a_couloir creer_couloir(int largeur, const char *sequence){
 	
@@ -42,8 +40,10 @@ a_couloir creer_couloir(int largeur, const char *sequence){
     
 	// attribution de l'identifiant 
 	if (c != NULL) {
-        	c->id_couloir = ++dernierIdAttribue_couloir;
-    	}
+        int nouveau_id = lire_int("couloirs/config.txt");
+	   	c->id_couloir = ++nouveau_id;
+	   	mettre_ajour_int("couloirs/config.txt", c->id_couloir);
+	}
 	create_tableau(c);
 	return c;
 }

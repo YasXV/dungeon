@@ -2,7 +2,6 @@
 #define CHAMBRE_H
 #include "entites.h"
 
-
 typedef struct salle{
 
 char **enceinte ;

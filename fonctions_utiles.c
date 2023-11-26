@@ -42,3 +42,4 @@ void mettre_ajour_int(char* fichier_config,int entier){
     }
     fclose(fichier);
 }
+
