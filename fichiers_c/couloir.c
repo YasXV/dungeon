@@ -4,10 +4,10 @@
 // Date: 12 Nov 2023
 //--------------------------------------------------------------------------------
 
-#include "couloir.h"
+#include "fichiers_h/couloir.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "fonctions_utiles.h"
+#include "fichiers_h/fonctions_utiles.h"
 #include <string.h>
 
 //--------------------------------------------------------------------------------
