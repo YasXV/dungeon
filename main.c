@@ -35,6 +35,7 @@ affiche_salle(d1->salles_donjon[0]->salle);
 ajouter_entite_donjon(COFFRE,d1,16,20,1,0);
 ajouter_entite_donjon(BOSS,d1,7,12,0,0);
 ajouter_entite_donjon(PIEGE,d1,5,25,1,1);
+ajouter_entite_donjon(COFFRE, d1, 7, 12, 0, 1);
 affiche_salles_donjon(d1);
 affiche_donjon(d1);
 sauvegarder_donjon(d1);
