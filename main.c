@@ -31,7 +31,6 @@ ajouter_entite(MONSTRE,s1, 8,6,0,1);
 ajouter_entite(AUTEL,s1,10,13,1,1);
 ajouter_entite(MONSTRE,s1,12,15,0,1);
 ajouter_salle(d1, s1, 4,8,0);
-//ajouter_entite_donjon(COFFRE, d1, 19, 30, 1, 1);
 affiche_salle(d1->salles_donjon[0]->salle);
 ajouter_entite_donjon(COFFRE,d1,16,20,1,0);
 ajouter_entite_donjon(BOSS,d1,7,12,0,0);
