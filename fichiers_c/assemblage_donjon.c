@@ -15,26 +15,26 @@ void ajouter_salle(a_donjon mon_donjon, a_salle une_salle, int x, int y, int for
 
 	//cas où il n'y a pas dèjà une entité en x,y
 	if(present==-1){
-			// creation d'une a_salle_donjon et ajout de ma_salle dans celle-ci
-			a_salle_donjon salle_dans = malloc(sizeof(a_salle_donjon));
-			if (salle_dans == NULL) {
-        		fprintf(stderr,"échec de l'allocation de mémoire d'une salle dans un donjon");
-        		}
-			salle_dans->salle = une_salle;
-
-			//ajout des coordonnées dans le donjon de la a_salle_donjon
-			salle_dans->x = x;
-			salle_dans->y = y;
-						
-			// ajout de cette a_salle_donjon dans le tableau de a_salle_donjon lié au donjon
-			ajouter_tableau_salles(salle_dans, mon_donjon);
-			
-			// ajout de la a_salle_donjon dans l'enceinte du donjon
-			for (int i = 0; i <salle_dans->salle->longueur; i++) {
-				for (int j = 0; j <salle_dans->salle->largeur; j++) {
-					mon_donjon->enceinte[y+i][x+j] = salle_dans->salle->enceinte[i][j];
-				}		 
+		// creation d'une a_salle_donjon et ajout de ma_salle dans celle-ci
+		a_salle_donjon salle_dans = malloc(sizeof(a_salle_donjon));
+		if (salle_dans == NULL) {
+			fprintf(stderr,"échec de l'allocation de mémoire d'une salle dans un donjon");
 			}
+		salle_dans->salle = une_salle;
+
+		//ajout des coordonnées dans le donjon de la a_salle_donjon
+		salle_dans->x = x;
+		salle_dans->y = y;
+					
+		// ajout de cette a_salle_donjon dans le tableau de a_salle_donjon lié au donjon
+		ajouter_tableau_salles(salle_dans, mon_donjon);
+		
+		// ajout de la a_salle_donjon dans l'enceinte du donjon
+		for (int i = 0; i <salle_dans->salle->longueur; i++) {
+			for (int j = 0; j <salle_dans->salle->largeur; j++) {
+				mon_donjon->enceinte[y+i][x+j] = salle_dans->salle->enceinte[i][j];
+			}		 
+		}
 	}
 }
 
@@ -76,11 +76,11 @@ void ajouter_entite_donjon(entite_id mon_entite_id, a_donjon mon_donjon, int x, 
 		
 		//ajout dans l'enceinte du donjon la nouvelle entite
 			mon_donjon->enceinte[y][x] = nouvelle_entite->symbole;
-		}
+	}
 
 	else {
 		fprintf(stderr, "Pas de salle là où vous voulez placer l'entité.\n");	
-		 }
+	}
 }
 
 	
@@ -89,10 +89,10 @@ int verifier_entite_donjon(a_donjon mon_donjon, int x, int y){
 	for(int i =0;i<mon_donjon->nbre_elements_salles; i++){
 		if((x>= mon_donjon->salles_donjon[i]->x && x <= mon_donjon->salles_donjon[i]->x + mon_donjon->salles_donjon[i]->salle->largeur) &&
 			(y>= mon_donjon->salles_donjon[i]->y && y <= mon_donjon->salles_donjon[i]->y + mon_donjon->salles_donjon[i]->salle->longueur))
-		 {
+		{
 		 	printf("DANS UNE SALLE OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 			return i;
-			}    
+		}    
 	}
 	return -1;
 }

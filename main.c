@@ -15,6 +15,7 @@
 #include "assemblage_chambre.h"
 #include "assemblage_donjon.h"
 #include "donjon.h"
+#include "ihm.h"
 
 
 //--------------------------------------------------------------------------------
@@ -33,7 +34,9 @@ ajouter_salle(d1, s2, 12,26,0);
 affiche_salle(d1->salles_donjon[0]->salle);
 sauvegarder_donjon(d1);
 affiche_donjon(d1);
+clear_Console();
 affiche_salles_donjon(d1);
+
     /*a_couloir c1 = creer_couloir(1,"SSSSEEEE");
     sauvegarder_couloir(c1);
     a_couloir c2 = recuperer_couloir("couloirs/couloir1.txt");

@@ -18,6 +18,7 @@ void clear_Console() {
 
 void clear_Console() {
     system("clear");
+    printf("\033[2J\033[1;1H");
 }
 
 #endif

@@ -91,7 +91,7 @@ void affiche_salles_donjon(a_donjon mon_donjon){
 	printf("Nombre de salles contenu dans le donjon : %d\n",mon_donjon->nbre_elements_salles);
 	for(int i=0;i<mon_donjon->nbre_elements_salles;i++){
 		affiche_salle_donjon(mon_donjon->salles_donjon[i]);
-		}
+	}
 }
 
 
@@ -116,20 +116,22 @@ int sauvegarder_donjon(a_donjon mon_donjon){
 	
 	//ouverture du fichier 
 	fichier = fopen(nom_fichier,"w+");
-	+
+	
 	//erreur d'ouverture fichier
 	if (fichier == NULL) {
         fprintf(stderr,"Impossible d'ouvrir le fichier %s pour l'écriture.\n",
 			 nom_fichier);
         return 1;
-    	}
+	}
 
 	//écriture des dimensions du donjon 
 	fprintf(fichier,"%d\n%d\n",mon_donjon->largeur,mon_donjon->longueur);
 	
 	//ecriture des salles contenu dans le donjon
 	fprintf(fichier,"%d\n",mon_donjon->nbre_elements_salles);
+	
 	for(int i=0; i<mon_donjon->nbre_elements_salles; i++){
+		fprintf(fichier,"Nouvele salle\n");
 		fprintf(fichier,"%d\t%d\t%d\t%d\n",
 		(mon_donjon->salles_donjon[i]->salle)->largeur,
 		(mon_donjon->salles_donjon[i]->salle)->longueur,
@@ -140,7 +142,7 @@ int sauvegarder_donjon(a_donjon mon_donjon){
 		
 		//entites contenu dans la salle
 		fprintf(fichier,"%d\n",mon_donjon->salles_donjon[i]->salle->nbre_elements);
-		for(int j=0;i<mon_donjon->salles_donjon[i]->salle->nbre_elements;i++){
+		for(int j=0;j<mon_donjon->salles_donjon[i]->salle->nbre_elements;j++){
 			fprintf(fichier,"%d\t%d\t%d\t%d\n",
 			(mon_donjon->salles_donjon[i]->salle->entites_contenu[j])->id_entite,
 			(mon_donjon->salles_donjon[i]->salle->entites_contenu[j])->x,
