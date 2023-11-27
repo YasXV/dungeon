@@ -1,4 +1,3 @@
-#include <windows.h>
 #include <stdio.h>
 #include "ihm.h"
 #ifdef _WIN64

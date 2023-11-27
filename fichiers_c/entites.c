@@ -109,7 +109,7 @@ char* avoir_type_entite(a_entite mon_entite){
 
 //affiche une entité avec ses propriétes
 void affiche_entite(a_entite mon_entite){
-	printf("type : %s | interaction : %d | position: (%d,%d)\n",
+	printf("type : %s | interaction : %d | position relative a la salle: (%d,%d)\n",
 		avoir_type_entite(mon_entite), mon_entite->interaction, 
 		mon_entite->x, mon_entite->y
 		);	

@@ -49,8 +49,9 @@ void remplir_mur_donjon(a_donjon mon_donjon);
 
 int sauvegarder_donjon(a_donjon mon_donjon);
 
-//insere une a_salle dans un a_donjon a la position x,y! forcage est un int qui indique si on force l'écrasement des salles si il y en a dèjà une à la position x,y
-void inserer_salle(a_donjon mon_donjon, a_salle une_salle, int x, int y, int forcage);
+void affiche_salles_donjon(a_donjon mon_donjon);
+
+void affiche_salle_donjon(a_salle_donjon une_salle);
 
 
 

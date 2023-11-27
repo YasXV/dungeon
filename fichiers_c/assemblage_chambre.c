@@ -51,7 +51,7 @@ void ajouter_entite(entite_id mon_entite_id, a_salle ma_salle, int x, int y, int
 		}
 }
 
-//vérifie si une entité est déjà présente à la position x,y dans la salle, retourne l'indice, dans le tableau d'entites lié à la salle, où est contenu l'entité à la position x,y 
+//vérifie si une entité est déjà présente à la position x,y dans la salle, retourne l'indice, dans le tableau d'entites lié à la salle, où est contenu l'entité à la position x,y! sinon retourne -1 
 int verifier_entite_presente(a_salle ma_salle, int x, int y){
 	for(int i =0;i<ma_salle->nbre_elements; i++){
 		if(ma_salle->entites_contenu[i]->x==x && ma_salle->entites_contenu[i]->y==y){
@@ -97,7 +97,7 @@ int ajouter_tableau_entite(a_entite mon_entite, a_salle ma_salle){
 	//on vérifie que l'ajout d'une nouvelle entité ne nous fait pas arriver à la limite de capacité, si oui, nous faisons une réallocation en fonction de la dimension de la salle
 	if (ma_salle->nbre_elements == ma_salle->capacite_actuelle) {
 		ma_salle->capacite_actuelle +=(int)((ma_salle->largeur*ma_salle->longueur)/100);
-    	ma_salle->entites_contenu = realloc(ma_salle->entites_contenu, ma_salle->capacite_actuelle*sizeof(entite));
+    	ma_salle->entites_contenu = realloc(ma_salle->entites_contenu, ma_salle->capacite_actuelle*sizeof(a_entite));
     	printf("réallocation dynamique car plus de place, capacité actuelle : %d\n",ma_salle->capacite_actuelle);
     	}
 

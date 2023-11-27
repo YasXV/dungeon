@@ -1,5 +1,7 @@
-#include "../fichiers_h/donjon.h"
-#include "../fichiers_h/fonctions_utiles.h"
+#include "donjon.h"
+#include "fonctions_utiles.h"
+#include "entites.h"
+#include "couloir.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -84,6 +86,26 @@ void affiche_donjon(a_donjon mon_donjon){
 }
 
 
+//affiche toutes les a_salle_donjon contenu dans le donjon, avec avec entier "entités" (si mi à 1, alors cela affiche aussi toutes les entités contenu dans les salles)
+void affiche_salles_donjon(a_donjon mon_donjon){
+	printf("Nombre de salles contenu dans le donjon : %d\n",mon_donjon->nbre_elements_salles);
+	for(int i=0;i<mon_donjon->nbre_elements_salles;i++){
+		affiche_salle_donjon(mon_donjon->salles_donjon[i]);
+		}
+}
+
+
+//affcihe une a_salle_donjon et ses propriétes
+void affiche_salle_donjon(a_salle_donjon une_salle){
+	printf("dimensions : (%d,%d) | position: (%d,%d)\n",
+		une_salle->salle->largeur, une_salle->salle->longueur, 
+		une_salle->x, une_salle->y
+		);
+	affiche_entites_salle(une_salle->salle);
+}			
+	
+	
+
 //sauvegarde un donjon dans un fichier txt
 int sauvegarder_donjon(a_donjon mon_donjon){
 	FILE *fichier;
@@ -94,7 +116,7 @@ int sauvegarder_donjon(a_donjon mon_donjon){
 	
 	//ouverture du fichier 
 	fichier = fopen(nom_fichier,"w+");
-	
+	+
 	//erreur d'ouverture fichier
 	if (fichier == NULL) {
         fprintf(stderr,"Impossible d'ouvrir le fichier %s pour l'écriture.\n",
@@ -114,6 +136,7 @@ int sauvegarder_donjon(a_donjon mon_donjon){
 		(mon_donjon->salles_donjon[i])->x,
 		(mon_donjon->salles_donjon[i])->y
 		);
+		fprintf(fichier,"NORMALEMENT\n");
 		
 		//entites contenu dans la salle
 		fprintf(fichier,"%d\n",mon_donjon->salles_donjon[i]->salle->nbre_elements);
@@ -130,10 +153,7 @@ int sauvegarder_donjon(a_donjon mon_donjon){
 	//ecriture des couloirs contenu dans le donjon 
 	fprintf(fichier,"%d\n",mon_donjon->nbre_elements_couloirs);
 	for(int i=0; i<mon_donjon->nbre_elements_couloirs; i++){
-		fprintf(fichier,"%d\t%d\t%d\t%s\n%d\n%d",
-		(mon_donjon->couloirs_donjon[i]->couloir)->hauteur,
-		(mon_donjon->couloirs_donjon[i]->couloir)->ligne,
-		(mon_donjon->couloirs_donjon[i]->couloir)->largeur,
+		fprintf(fichier,"%s\t%d\t%d\n",
 		(mon_donjon->couloirs_donjon[i]->couloir)->sequence,
 		(mon_donjon->couloirs_donjon[i])->x,
 		(mon_donjon->couloirs_donjon[i])->y
