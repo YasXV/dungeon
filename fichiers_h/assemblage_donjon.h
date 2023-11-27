@@ -39,6 +39,8 @@ int ajouter_tableau_couloirs(a_couloir_donjon un_couloir, a_donjon mon_donjon);
 //verifie si l'entité qu'on veut ajouter à la position x,y dans le donjon sera bien contenu dans une salle, si oui retourne l'indice i de la a_salle_donjon dans le tableau des  a_salles_donjon où l'entité va se retrouver 
 int verifier_entite_donjon(a_donjon mon_donjon, int x, int y);
 
+//récupération d'un dnjon depuis un fichier dans un a_donjon
+a_donjon recup_donjon(char* nom_fichier);
 //------------------------------------------------------------------
 
 #endif
