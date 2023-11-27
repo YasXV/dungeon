@@ -48,7 +48,6 @@ void ajouter_salle(a_donjon mon_donjon, a_salle une_salle, int x, int y, int for
 
 // ajoute une salle dans le tableau de salle lié au donjon
 int ajouter_tableau_salles(a_salle_donjon une_salle, a_donjon mon_donjon){
-	mon_donjon->salles_donjon[mon_donjon->nbre_elements_salles++] = une_salle;
 	
 	//on vérifie que l'ajout d'une salle ne nous fait pas arriver à la limite de capacité, si oui, nous faisons une réallocation (2 places en plus)
 	if (mon_donjon->nbre_elements_salles == mon_donjon->capacite_salles) {
@@ -63,6 +62,8 @@ int ajouter_tableau_salles(a_salle_donjon une_salle, a_donjon mon_donjon){
         return 1;  // Code d'erreur
     }
     
+	mon_donjon->salles_donjon[mon_donjon->nbre_elements_salles++] = une_salle;
+	
     return 0;
 }
 
@@ -110,7 +111,6 @@ int verifier_entite_donjon(a_donjon mon_donjon, int x, int y){
 
 // ajoute un couloir dans le tableau de couloir lié au donjon
 int ajouter_tableau_couloirs(a_couloir_donjon un_couloir, a_donjon mon_donjon){
-	mon_donjon->couloirs_donjon[mon_donjon->nbre_elements_couloirs++] = un_couloir;
 	
 	//on vérifie que l'ajout d'un couloir ne nous fait pas arriver à la limite de capacité, si oui, nous faisons une réallocation (3 places en plus)
 	if (mon_donjon->nbre_elements_couloirs == mon_donjon->capacite_couloirs) {
@@ -124,6 +124,10 @@ int ajouter_tableau_couloirs(a_couloir_donjon un_couloir, a_donjon mon_donjon){
         fprintf(stderr, "Échec de la réallocation de mémoire pour le tableau dynamique de couloirs.\n");
         return 1;  // Code d'erreur
     }
+
+
+	mon_donjon->couloirs_donjon[mon_donjon->nbre_elements_couloirs++] = un_couloir;
+
     
     return 0;
 }
