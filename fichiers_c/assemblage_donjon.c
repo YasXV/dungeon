@@ -132,3 +132,50 @@ int verifier_salle_presente(a_donjon mon_donjon, a_salle une_salle, int x, int y
 	}
 	return -1;
 }
+
+//récupération d'un dnjon depuis un fichier dans un a_donjon
+a_donjon recup_donjon(char* nom_fichier){
+	FILE *fichier;
+	
+	//ouverture du fichier 
+	fichier = fopen(nom_fichier,"r");
+	
+	//erreur d'ouverture fichier
+	if (fichier == NULL) {
+        fprintf(stderr,"Impossible d'ouvrir le fichier %s pour la lecture.\n",
+				 nom_fichier);
+    }
+	
+    //lecture des dimensions
+    int largeur, longueur;
+    fscanf(fichier, "%d\n%d\n", &(largeur), &(longueur));
+    
+    //création du donjon
+    a_donjon d = creer_donjon(largeur, longueur);
+    
+    //lecture de la capacité du tableau de salles_donjon
+    fscanf(fichier,"%d\n", &(d->capacite_salles));
+    
+    //allocation de la mémoire pour le tableau de a_salle_donjon avec la capacité récupérer du fichier
+    d->salles_donjon = (salle_donjon**)realloc(d->salles_donjon,(d->capacite_salles)*sizeof(a_salle_donjon));
+	
+	//lecture des salles, création de celles-ci et ajout dans le tableau de a_salle_donjon lié au donjon
+	int boucle = d->capacite_salles;
+	int largeur2,longueur2,x,y;
+    for(int i=0;i<boucle;i++){ 	
+    	fscanf(fichier,"%d\t%d\t%d\t%d\n",&largeur2,&longueur2,&x,&y);
+    	a_salle s = creer_salle(largeur2,longueur2);
+
+    	//lecture des entités, création de celles-ci et ajout dans la salle
+		int boucle2 = fscanf(fichier,"%d\n",&(s->capacite_actuelle));
+		int x_entite,y_entite,id,interaction;
+    	for(int j=0;j<boucle2;j++){ 	
+			fscanf(fichier,"%d\t%d\t%d\t%d\n",&id,&x_entite,&y_entite,&interaction);
+			ajouter_entite(id, s, x_entite, y_entite, interaction,0);
+    	}
+    	//ajout de la salle rempli de ses entités dans le donjon
+    	ajouter_salle(d, s, x, y, 0);
+    }
+   
+	return d;
+}
