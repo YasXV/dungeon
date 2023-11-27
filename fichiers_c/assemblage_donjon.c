@@ -171,8 +171,7 @@ a_donjon recup_donjon(char* nom_fichier){
     fscanf(fichier,"%d\n", &(d->capacite_salles));
     //printf("capacité du tableau de salles : %d\n",d->capacite_salles);
     //allocation de la mémoire pour le tableau de a_salle_donjon avec la capacité récupérer du fichier
-    //d->salles_donjon = (salle_donjon**)realloc(d->salles_donjon,(d->capacite_salles)*sizeof(a_salle_donjon));
-	printf("coucou\n");
+    d->salles_donjon = (salle_donjon**)realloc(d->salles_donjon,(d->capacite_salles)*sizeof(a_salle_donjon));
 	//lecture des salles, création de celles-ci et ajout dans le tableau de a_salle_donjon lié au donjon
 	int boucle = d->capacite_salles;
 	int largeur2,longueur2,x,y;
@@ -182,17 +181,14 @@ a_donjon recup_donjon(char* nom_fichier){
 
     	//lecture des entités, création de celles-ci et ajout dans la salle
 		int boucle2;
+		int capacite;
 		fscanf(fichier,"%d\n",&(s->capacite_actuelle));
 		boucle2 = s->capacite_actuelle;
-		printf("%d\n",boucle2);
 		int x_entite,y_entite,id,interaction;
-    	for(int j=0;j<boucle2;j++){ 	
+    	for(int j=0;j<boucle2;j++){
 			fscanf(fichier,"%d\t%d\t%d\t%d\n",&id,&x_entite,&y_entite,&interaction);
-			printf("oui\n");
 			ajouter_entite(id, s, x_entite, y_entite, interaction,0);
-			printf("%d\n",j);
     	}
-		printf("coucou2\n");
     	//ajout de la salle rempli de ses entités dans le donjon
     	ajouter_salle(d, s, x, y, 0);
     }

@@ -18,13 +18,11 @@ void ajouter_entite(entite_id mon_entite_id, a_salle ma_salle, int x, int y, int
 	//cas où il n'y a pas dèjà une entité en x,y
 	if(present==-1){	
 		if(possible==0){
-			printf("kiwi\n");
 			//création de l'entité
 			a_entite nouvelle_entite = creer_entite(mon_entite_id, x, y, interaction);
 			
 			// ajout de cette entité dans le tableau d'entité lié à la salle
 			ajouter_tableau_entite(nouvelle_entite, ma_salle);
-			printf("new\n");
 			// ajout du symbole de l'entité dans l'enceinte de la salle
 			ma_salle->enceinte[y][x]=nouvelle_entite->symbole;
 			}
@@ -92,21 +90,21 @@ int verifier_possibilite_ajout(entite_id mon_entite_id, a_salle ma_salle, int x,
 // fonction qui ajoute une entite dans l'attribut tableau entites lié à une salle
 int ajouter_tableau_entite(a_entite mon_entite, a_salle ma_salle){
 
-	//on ajoute notre entite dans le tableau d'entites lié à la salle
-	ma_salle->entites_contenu[ma_salle->nbre_elements++]=mon_entite;
-	printf("%d et %d\n",ma_salle->nbre_elements,ma_salle->nbre_elements);
 	//on vérifie que l'ajout d'une nouvelle entité ne nous fait pas arriver à la limite de capacité, si oui, nous faisons une réallocation en fonction de la dimension de la salle
-	if (ma_salle->nbre_elements == ma_salle->capacite_actuelle) {
+	if (ma_salle->nbre_elements == ma_salle->capacite_actuelle){
 		ma_salle->capacite_actuelle += (int)((ma_salle->largeur*ma_salle->longueur)/100);
-    	ma_salle->entites_contenu = realloc(ma_salle->entites_contenu, ma_salle->capacite_actuelle*sizeof(a_entite));
+		ma_salle->entites_contenu = realloc(ma_salle->entites_contenu, ma_salle->capacite_actuelle*sizeof(a_entite));
     	printf("réallocation dynamique car plus de place, capacité actuelle : %d\n",ma_salle->capacite_actuelle);
-    	}
+    }
     // Vérifier si la réallocation a réussi
     if (ma_salle->entites_contenu == NULL) {
         fprintf(stderr, "Échec de la réallocation de mémoire pour le tableau dynamique d'entités.\n");
         return 1;  // Code d'erreur
     }
-    
+
+	//on ajoute notre entite dans le tableau d'entites lié à la salle
+	ma_salle->entites_contenu[ma_salle->nbre_elements++]=mon_entite;
+
     return 0;
 }
 

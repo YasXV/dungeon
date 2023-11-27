@@ -39,7 +39,7 @@ ajouter_entite_donjon(PIEGE,d1,5,25,1,1);
 affiche_salles_donjon(d1);
 affiche_donjon(d1);
 sauvegarder_donjon(d1);
-a_donjon d2 = recup_donjon("donjons/donjon14.txt");
+a_donjon d2 = recup_donjon("donjons/donjon1.txt");
 affiche_donjon(d2);
 return 0;
 }
