@@ -25,7 +25,7 @@ void ajouter_salle(a_donjon mon_donjon, a_salle une_salle, int x, int y, int for
 		a_salle_donjon salle_dans = malloc(sizeof(a_salle_donjon));
 		if (salle_dans == NULL) {
 			fprintf(stderr,"échec de l'allocation de mémoire d'une salle dans un donjon");
-			}
+		}
 		salle_dans->salle = une_salle;
 
 		//ajout des coordonnées dans le donjon de la a_salle_donjon
@@ -73,8 +73,7 @@ void ajouter_entite_donjon(entite_id mon_entite_id, a_donjon mon_donjon, int x, 
 	
 	//verifie si l'entité va se trouver dans une salle, si oui, i est l'indice dans le tableau de a_salle_donjon où ajouter l'entité
 	int i = verifier_entite_donjon(mon_donjon, x, y);
-	
-	if(i!=-1){
+	if(i != -1){
 		//création d'une entité qui va juste nous servir à récupérer le bon symbole pour l'ajouter au donjon ( car ajout_entite s'occupe de tout le reste)
 		a_entite nouvelle_entite = creer_entite(mon_entite_id, x, y, interaction);
 
@@ -87,7 +86,6 @@ void ajouter_entite_donjon(entite_id mon_entite_id, a_donjon mon_donjon, int x, 
 		//ajout dans l'enceinte du donjon la nouvelle entite
 			mon_donjon->enceinte[y][x] = nouvelle_entite->symbole;
 	}
-
 	else {
 		fprintf(stderr, "Pas de salle là où vous voulez placer l'entité.\n");	
 	}
@@ -97,9 +95,9 @@ void ajouter_entite_donjon(entite_id mon_entite_id, a_donjon mon_donjon, int x, 
 	
 //verifie si l'entité qu'on veut ajouter à la position x,y dans le donjon sera bien contenu dans une salle, si oui retourne l'indice i de la a_salle_donjon dans le tableau des  a_salles_donjon où l'entité va se retrouver 
 int verifier_entite_donjon(a_donjon mon_donjon, int x, int y){
-	for(int i =0;i<mon_donjon->nbre_elements_salles; i++){
-		if((x>= mon_donjon->salles_donjon[i]->x && x <= mon_donjon->salles_donjon[i]->x + mon_donjon->salles_donjon[i]->salle->largeur) &&
-			(y>= mon_donjon->salles_donjon[i]->y && y <= mon_donjon->salles_donjon[i]->y + mon_donjon->salles_donjon[i]->salle->longueur))
+	for(int i = 0;i<mon_donjon->nbre_elements_salles; i++){
+		if((x>= mon_donjon->salles_donjon[i]->x && x < mon_donjon->salles_donjon[i]->x + mon_donjon->salles_donjon[i]->salle->largeur) &&
+			(y>= mon_donjon->salles_donjon[i]->y && y < mon_donjon->salles_donjon[i]->y + mon_donjon->salles_donjon[i]->salle->longueur))
 		{
 		 	printf("DANS UNE SALLE OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 			return i;
@@ -171,24 +169,30 @@ a_donjon recup_donjon(char* nom_fichier){
     
     //lecture de la capacité du tableau de salles_donjon
     fscanf(fichier,"%d\n", &(d->capacite_salles));
-    
+    //printf("capacité du tableau de salles : %d\n",d->capacite_salles);
     //allocation de la mémoire pour le tableau de a_salle_donjon avec la capacité récupérer du fichier
-    d->salles_donjon = (salle_donjon**)realloc(d->salles_donjon,(d->capacite_salles)*sizeof(a_salle_donjon));
-	
+    //d->salles_donjon = (salle_donjon**)realloc(d->salles_donjon,(d->capacite_salles)*sizeof(a_salle_donjon));
+	printf("coucou\n");
 	//lecture des salles, création de celles-ci et ajout dans le tableau de a_salle_donjon lié au donjon
 	int boucle = d->capacite_salles;
 	int largeur2,longueur2,x,y;
-    for(int i=0;i<boucle;i++){ 	
+    for(int i=0;i<boucle;i++){ 
     	fscanf(fichier,"%d\t%d\t%d\t%d\n",&largeur2,&longueur2,&x,&y);
     	a_salle s = creer_salle(largeur2,longueur2);
 
     	//lecture des entités, création de celles-ci et ajout dans la salle
-		int boucle2 = fscanf(fichier,"%d\n",&(s->capacite_actuelle));
+		int boucle2;
+		fscanf(fichier,"%d\n",&(s->capacite_actuelle));
+		boucle2 = s->capacite_actuelle;
+		printf("%d\n",boucle2);
 		int x_entite,y_entite,id,interaction;
     	for(int j=0;j<boucle2;j++){ 	
 			fscanf(fichier,"%d\t%d\t%d\t%d\n",&id,&x_entite,&y_entite,&interaction);
+			printf("oui\n");
 			ajouter_entite(id, s, x_entite, y_entite, interaction,0);
+			printf("%d\n",j);
     	}
+		printf("coucou2\n");
     	//ajout de la salle rempli de ses entités dans le donjon
     	ajouter_salle(d, s, x, y, 0);
     }

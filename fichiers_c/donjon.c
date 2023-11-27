@@ -131,14 +131,12 @@ int sauvegarder_donjon(a_donjon mon_donjon){
 	fprintf(fichier,"%d\n",mon_donjon->nbre_elements_salles);
 	
 	for(int i=0; i<mon_donjon->nbre_elements_salles; i++){
-		fprintf(fichier,"Nouvele salle\n");
 		fprintf(fichier,"%d\t%d\t%d\t%d\n",
 		(mon_donjon->salles_donjon[i]->salle)->largeur,
 		(mon_donjon->salles_donjon[i]->salle)->longueur,
 		(mon_donjon->salles_donjon[i])->x,
 		(mon_donjon->salles_donjon[i])->y
 		);
-		fprintf(fichier,"NORMALEMENT\n");
 		
 		//entites contenu dans la salle
 		fprintf(fichier,"%d\n",mon_donjon->salles_donjon[i]->salle->nbre_elements);
