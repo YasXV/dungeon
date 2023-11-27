@@ -1,3 +1,9 @@
+//! C standard
+// encoding: utf-8
+//------------------------------------------------------------------
+// File assemblage_donjon.c
+// Date : 27 Nov 2023
+//------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include "assemblage_donjon.h"
@@ -5,7 +11,7 @@
 #include "assemblage_chambre.h"
 #include "entites.h"
 #include "chambre.h"
-
+//------------------------------------------------------------------
 
 //ajoute une salle dans mon donjon à la position x, y, forcage est un entier qui si il est égal à 0, autorise l'écrasement d'une salle par une autre!
 void ajouter_salle(a_donjon mon_donjon, a_salle une_salle, int x, int y, int forcage){	
@@ -38,6 +44,8 @@ void ajouter_salle(a_donjon mon_donjon, a_salle une_salle, int x, int y, int for
 	}
 }
 
+//------------------------------------------------------------------
+
 // ajoute une salle dans le tableau de salle lié au donjon
 int ajouter_tableau_salles(a_salle_donjon une_salle, a_donjon mon_donjon){
 	mon_donjon->salles_donjon[mon_donjon->nbre_elements_salles++] = une_salle;
@@ -57,6 +65,8 @@ int ajouter_tableau_salles(a_salle_donjon une_salle, a_donjon mon_donjon){
     
     return 0;
 }
+
+//------------------------------------------------------------------
 
 //ajoute une entité à la position x, y (relative au donjon) , celle-ci va s'attacher automatiquement à une salle si la position x,y est dans une salle
 void ajouter_entite_donjon(entite_id mon_entite_id, a_donjon mon_donjon, int x, int y, int interaction, int forcage){
@@ -83,6 +93,7 @@ void ajouter_entite_donjon(entite_id mon_entite_id, a_donjon mon_donjon, int x, 
 	}
 }
 
+//------------------------------------------------------------------
 	
 //verifie si l'entité qu'on veut ajouter à la position x,y dans le donjon sera bien contenu dans une salle, si oui retourne l'indice i de la a_salle_donjon dans le tableau des  a_salles_donjon où l'entité va se retrouver 
 int verifier_entite_donjon(a_donjon mon_donjon, int x, int y){
@@ -97,6 +108,7 @@ int verifier_entite_donjon(a_donjon mon_donjon, int x, int y){
 	return -1;
 }
 
+//------------------------------------------------------------------
 
 // ajoute un couloir dans le tableau de couloir lié au donjon
 int ajouter_tableau_couloirs(a_couloir_donjon un_couloir, a_donjon mon_donjon){
@@ -118,6 +130,8 @@ int ajouter_tableau_couloirs(a_couloir_donjon un_couloir, a_donjon mon_donjon){
     return 0;
 }
 
+//------------------------------------------------------------------
+
 //vérifie si il y a possiblement superposition de salle lors de l'ajout d'une salle en x,y, si oui retourne l'indice i de la salle dans le tableau des salles lié au donjon (pour pouvoir l'écraser si besoin), si non, retourne -1 
 int verifier_salle_presente(a_donjon mon_donjon, a_salle une_salle, int x, int y){
 	for(int i =0;i<mon_donjon->nbre_elements_salles; i++){
@@ -132,3 +146,7 @@ int verifier_salle_presente(a_donjon mon_donjon, a_salle une_salle, int x, int y
 	}
 	return -1;
 }
+
+//------------------------------------------------------------------
+//End OF File
+//------------------------------------------------------------------

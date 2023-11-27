@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "ihm.h"
+
 #ifdef _WIN64
 
 void clear_Console() {
