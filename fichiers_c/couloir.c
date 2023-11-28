@@ -135,7 +135,9 @@ void fill_couloir(couloir *c){
 			c->tableau[first_x - 1][first_y] = '-';
 		}
 		if(c->sequence[0] == 'N'){
-			c->tableau[first_x + 1][first_y] = '-';
+			if(count_occurence("W",c) == 0){
+				c->tableau[first_x + 1][first_y] = '-';
+			}
 		}
 	}
 	if (first_y == 1){
@@ -154,7 +156,7 @@ void fill_couloir(couloir *c){
 		}
 	}
 	if (c->sequence[strlen(c->sequence) - 1] == 'S'){
-		if (final_x != c->hauteur - 1){
+		if (final_x < c->hauteur - 1){
 			c->tableau[final_x + 1][final_y] = '-';
 		}
 	}
@@ -435,7 +437,12 @@ void count_max_ligne(couloir *c){
 			}
 			else{
 				if (ligne_est == 0){
-					gain = 1;
+					if (c->sequence[strlen(c->sequence) - 1] == 'W'){
+						gain = 1;
+					}
+					else{
+						gain = 3;
+					}
 				}
 				else{
 					gain = 3;
@@ -485,9 +492,11 @@ void clean_tableau(couloir *c) {
         }
     }
 	if (c->sequence[0] == 'N'){
-		for(int i = 1; i < c->hauteur - 1; i++){
-			if(c->tableau[c->hauteur - i][1] == '#'){
-				c->tableau[c->hauteur - i][1] = '-';
+		if (count_occurence("W",c) == 0){
+			for(int i = 1; i < c->hauteur - 1; i++){
+				if(c->tableau[c->hauteur - i][1] == '#'){
+					c->tableau[c->hauteur - i][1] = '-';
+				}
 			}
 		}
 	}
