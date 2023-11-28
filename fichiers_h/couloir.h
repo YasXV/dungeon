@@ -68,6 +68,11 @@ a_couloir recuperer_couloir(char *nom_fichier);
 void calcul_position_physique(couloir *c, int *x, int *y, int *x_physique, int *y_physique);
 
 //--------------------------------------------------------------------------------
+
+void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_physique);
+
+//--------------------------------------------------------------------------------
+
 #endif 
 
 //--------------------------------------------------------------------------------

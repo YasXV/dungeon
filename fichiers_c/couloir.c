@@ -39,7 +39,7 @@ a_couloir creer_couloir(int largeur, const char *sequence){
     }
     
 	// attribution de l'identifiant 
-	if (c != NULL) {
+	if (c != NULL){
         int nouveau_id = lire_int("couloirs/config.txt");
 	   	c->id_couloir = ++nouveau_id;
 	   	mettre_ajour_int("couloirs/config.txt", c->id_couloir);
@@ -564,6 +564,43 @@ void calcul_position_physique(couloir *c, int *x, int *y, int *x_physique, int *
 			*x_physique += (nb_deplacement_west - nb_deplacement_est);
 		}
 	}
+}
+
+//--------------------------------------------------------------------------------
+
+void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_physique){
+	*x_physique = *x;
+	*y_physique = *y;
+
+	//Ecriture de la séquence Miroir
+	char *sequence_miroir = malloc(strlen(c->sequence) + 1);
+	strcpy(sequence_miroir,c->sequence);
+	for (int i = 0; i < strlen(sequence_miroir); i++){
+		if (sequence_miroir[i] == 'N'){
+			sequence_miroir[i] = 'S';
+		}
+		else if (sequence_miroir[i] == 'S'){
+			sequence_miroir[i] = 'N';
+		}
+		else if (sequence_miroir[i] == 'E'){
+			sequence_miroir[i] = 'W';
+		}
+		else if (sequence_miroir[i] == 'W'){
+			sequence_miroir[i] = 'E';
+		}
+	}
+	size_t length = strlen(sequence_miroir);
+	char* reversed = (char*)malloc((length + 1) * sizeof(char)); 
+    if (reversed == NULL) {
+        printf("Allocation de mémoire échouée.\n");
+        return;
+    }
+	for (size_t i = 0; i < length; i++) {
+        reversed[i] = sequence_miroir[length - 1 - i]; // Inverse les caractères
+    }
+    reversed[length] = '\0';
+	couloir *c_miroir = creer_couloir(1,reversed);
+	calcul_position_physique(c_miroir,x,y,x_physique,y_physique);
 }
 
 //--------------------------------------------------------------------------------
