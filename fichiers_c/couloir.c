@@ -44,7 +44,6 @@ a_couloir creer_couloir(int largeur, const char *sequence){
 	   	c->id_couloir = ++nouveau_id;
 	   	mettre_ajour_int("couloirs/config.txt", c->id_couloir);
 	}
-
 	create_tableau(c);
 	return c;
 }
@@ -132,6 +131,9 @@ void fill_couloir(couloir *c){
 	if (first_x > 0){
 		if(c->sequence[0] == 'S'){
 			c->tableau[first_x - 1][first_y] = '-';
+		}
+		if(c->sequence[0] == 'N'){
+			c->tableau[first_x + 1][first_y] = '-';
 		}
 	}
 	if (first_y == 1){
@@ -289,6 +291,38 @@ void start_placement(couloir *c, int *x, int *y){
 						*x = occurence_nord - occurence_sud;
 					}
 				}
+				else if(c->sequence[0] == 'N'){
+					int occurence_nord = 0;
+					int occurence_sud = 0;
+					for(int i = 0; i < strlen(c->sequence); i++){
+						if (c->sequence[i] == 'N'){
+							occurence_nord += 1;
+						}
+						else{
+							break;
+						}
+					}
+					for(int j = 0; j < strlen(c->sequence); j++){
+						if (c->sequence[j] == 'S'){
+							occurence_sud += 1;
+						}
+						else{
+							if(occurence_sud == 0){
+								continue;
+							}
+							else{
+								break;
+							}
+						}
+					}
+					if (occurence_sud > occurence_nord){
+						*x = c->hauteur - 1 - (occurence_sud - occurence_nord);
+					}
+					else{
+						*x = 0;
+					}
+					
+				}
 				else{
 					*x = 0;
 				}
@@ -334,7 +368,12 @@ void count_max_length(couloir *c){
 					gain = 3;
 				}
 				else{
-					gain = 2;
+					if((c->sequence[strlen(c->sequence) - 1] == 'N') && (c->sequence[0] == 'S')){
+						gain = 3;
+					}
+					else{
+						gain = 2;
+					}
 				}
 			}
 			else if (length_sud > length_nord){
@@ -346,8 +385,11 @@ void count_max_length(couloir *c){
 				}
 			}
 			else if (length_sud < length_nord){
-				if ((c->sequence[strlen(c->sequence) - 1] == 'E') ||(c->sequence[strlen(c->sequence) - 1] == 'W')){
+				if ((c->sequence[strlen(c->sequence) - 1] == 'E') || (c->sequence[strlen(c->sequence) - 1] == 'W')){
 					gain = 3;
+				}
+				else if ((c->sequence[strlen(c->sequence) - 1] == 'S') || (c->sequence[0] == 'N')){
+					gain = 2;
 				}
 				//else if (c->sequence[strlen(c->sequence) - 1] == 'N'){
 				//	gain = 3;
@@ -435,6 +477,23 @@ void clean_tableau(couloir *c) {
             }
         }
     }
+	if (c->sequence[0] == 'N'){
+		for(int i = 1; i < c->hauteur - 1; i++){
+			if(c->tableau[c->hauteur - i][1] == '#'){
+				c->tableau[c->hauteur - i][1] = '-';
+			}
+		}
+	}
+	if (c->sequence[strlen(c->sequence) - 1] == 'S'){
+		for(int i = 1; i < c->hauteur - 1; i++){
+			if((c->tableau[c->hauteur - i][c->ligne - 2] == '#') && (c->tableau[c->hauteur - i][c->ligne - 3] == '#')&& (c->tableau[c->hauteur - i][c->ligne - 1] == '#')){
+				c->tableau[c->hauteur - i][c->ligne - 2] = '-';
+				c->tableau[c->hauteur - i][c->ligne - 3] = '-';
+				c->tableau[c->hauteur - i][c->ligne - 1] = '-';
+			}
+		}
+		
+	}
 }
 
 //--------------------------------------------------------------------------------
@@ -517,51 +576,64 @@ void calcul_position_physique(couloir *c, int *x, int *y, int *x_physique, int *
 	//hauteur
 	if (nb_deplacement_nord == 0){
 		if (c->sequence[0] == 'S'){
-			*y_physique = *y;
+		*x_physique = *x;
 		}
 		else{
-			*y_physique += 1;
+		*x_physique += 1;
 		}
 	}
 	else if (nb_deplacement_sud == 0){
 		if (c->sequence[0] == 'N'){
-			*y_physique = *y + c->hauteur - 1;
+		*x_physique = *x + c->hauteur - 1;
 		}
 		else{
-			*y_physique += c->hauteur - 2;
+		*x_physique += c->hauteur - 2;
 		}
 	}
 	else {
 		if (nb_deplacement_nord > nb_deplacement_sud){
-			*y_physique += (nb_deplacement_nord - nb_deplacement_sud);
+			if(c->sequence[0] != 'N'){
+				*x_physique += (nb_deplacement_nord - nb_deplacement_sud);
+			}
+			else{
+				*x_physique = *x + c->hauteur - 2;
+			}
 		}
 		else if (nb_deplacement_nord < nb_deplacement_sud){
-			*y_physique += (nb_deplacement_sud - nb_deplacement_nord - 1);
+		*x_physique += (nb_deplacement_sud - nb_deplacement_nord - 1);
+		}
+		else{
+			if (c->sequence[0] == 'N'){
+				*x_physique = *x + c->hauteur - 2;
+			}
+			else if (c->sequence[0] == 'S'){
+				*x_physique += 1;
+			}
 		}
 	}
 	//largeur
 	if(nb_deplacement_est == 0){
 		if (c->sequence[0] == 'W'){
-			*x_physique = *x + c->ligne - 1;
+			*y_physique = *x + c->ligne - 1;
 		}
 		else{
-			*x_physique += c->ligne - 2;
+			*y_physique += c->ligne - 2;
 		}
 	}
 	else if (nb_deplacement_west == 0){
 		if (c->sequence[0] == 'E'){
-			*x_physique = *x;
+			*y_physique = *x;
 		}
 		else{
-			*x_physique += 1;
+			*y_physique += 1;
 		}
 	}
 	else{
 		if (nb_deplacement_est > nb_deplacement_west){
-			*x_physique += (nb_deplacement_est - nb_deplacement_west);
+			*y_physique += (nb_deplacement_est - nb_deplacement_west);
 		}
 		else if (nb_deplacement_est < nb_deplacement_west){
-			*x_physique += (nb_deplacement_west - nb_deplacement_est);
+			*y_physique += (nb_deplacement_west - nb_deplacement_est);
 		}
 	}
 }
@@ -574,6 +646,10 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
 
 	//Ecriture de la séquence Miroir
 	char *sequence_miroir = malloc(strlen(c->sequence) + 1);
+	if (sequence_miroir == NULL) {
+        printf("Allocation de mémoire échouée.\n");
+        return;
+    }
 	strcpy(sequence_miroir,c->sequence);
 	for (int i = 0; i < strlen(sequence_miroir); i++){
 		if (sequence_miroir[i] == 'N'){
@@ -601,6 +677,24 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
     reversed[length] = '\0';
 	couloir *c_miroir = creer_couloir(1,reversed);
 	calcul_position_physique(c_miroir,x,y,x_physique,y_physique);
+	//*y_physique += c->ligne - 3;
+	if(c->sequence[strlen(c->sequence) - 1] != 'N'){
+		int last_occurence = 0;
+		for (int i = 0; i < strlen(c->sequence); i++){
+			if (c->sequence[i] == 'N'){
+				last_occurence = 1;
+			}
+			else if (c->sequence[i] == 'S'){
+				last_occurence = 0;
+			}
+		}
+		if (last_occurence == 0){
+			*x_physique += c->hauteur - 2;
+		}
+		else{
+			*x_physique += 1;
+		}
+	}
 }
 
 //--------------------------------------------------------------------------------
