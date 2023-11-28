@@ -73,6 +73,9 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
 
 //--------------------------------------------------------------------------------
 
+void retirer_colonne(char **array, int rowIndex/*indice de la ligne*/,int ROWS /*nombre de colonne*/);
+
+//--------------------------------------------------------------------------------
 #endif 
 
 //--------------------------------------------------------------------------------

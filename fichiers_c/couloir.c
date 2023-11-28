@@ -92,8 +92,6 @@ int count_occurence(char *direction,couloir *c){
 void fill_couloir(couloir *c){
 	int x = 0;
 	int y = 0;
-	int x_phy = 0;
-	int y_phy = 0;
 	start_placement(c,&x,&y);
 
 	int longueurSequence = strlen(c->sequence);
@@ -128,8 +126,12 @@ void fill_couloir(couloir *c){
             c->tableau[x][y] = ' ';
         }
     }
-	clean_tableau(c);
 	
+	clean_tableau(c);
+	printf("first_x : %d\n",first_x);
+	printf("first_y : %d\n",first_y);
+	printf("final_x : %d\n",final_x);
+	printf("final_y : %d\n",final_y);
 	if (first_x > 0){
 		if(c->sequence[0] == 'S'){
 			c->tableau[first_x - 1][first_y] = '-';
@@ -152,6 +154,12 @@ void fill_couloir(couloir *c){
 		if (c->sequence[strlen(c->sequence) - 1] == 'N'){
 			if (final_x > 0){
 				c->tableau[final_x - 1][final_y] = '-';
+			}
+		}
+		if (c->sequence[strlen(c->sequence) - 1] == 'W'){
+			if (final_y > 0){
+				c->tableau[final_x][final_y - 1] = '-';
+				c->tableau[final_x + 1][final_y - 1] = '-';
 			}
 		}
 	}
@@ -382,7 +390,12 @@ void count_max_length(couloir *c){
 			}
 			else if (length_sud > length_nord){
 				if (c->sequence[0]=='S'){
-					gain = 2;
+					if (c->sequence[strlen(c->sequence) - 1] == 'S'){
+						gain = 1;
+					}
+					else{
+						gain = 1;
+					}
 				}
 				else{
 					gain = 2;
@@ -501,15 +514,72 @@ void clean_tableau(couloir *c) {
 		}
 	}
 	if (c->sequence[strlen(c->sequence) - 1] == 'S'){
-		for(int i = 1; i < c->hauteur - 1; i++){
-			if((c->tableau[c->hauteur - i][c->ligne - 2] == '#') && (c->tableau[c->hauteur - i][c->ligne - 3] == '#')&& (c->tableau[c->hauteur - i][c->ligne - 1] == '#')){
-				c->tableau[c->hauteur - i][c->ligne - 2] = '-';
-				c->tableau[c->hauteur - i][c->ligne - 3] = '-';
-				c->tableau[c->hauteur - i][c->ligne - 1] = '-';
+		int nb_depl_sud = 0;
+		int nb_depl_nord = 0;
+		for(int i = strlen(c->sequence) - 1; i > 0 ; i--){
+			if (c->sequence[i] == 'S'){
+				nb_depl_sud += 1;
+			}
+			else{
+				if(nb_depl_sud != 0){
+					break;
+				}
+			}
+		}
+		for(int j = strlen(c->sequence) - 1; j > 0; j--){
+			if (c->sequence[j] == 'N'){
+				nb_depl_nord += 1;
+			}
+			else{
+				if(nb_depl_nord != 0){
+					break;
+				}
+			}
+		}
+		int hauteur_max = c->hauteur - 1 - abs(nb_depl_sud - nb_depl_nord);
+		printf("hauteur_max : %d\n",hauteur_max);
+		for(int i = hauteur_max; i < c->hauteur - 1; i++){
+			if((c->tableau[i][c->ligne - 2] == '#') && (c->tableau[i][c->ligne - 3] == '#')&& (c->tableau[i][c->ligne - 1] == '#')){
+				c->tableau[i][c->ligne - 2] = '-';
+				c->tableau[i][c->ligne - 3] = '-';
+				c->tableau[i][c->ligne - 1] = '-';
 			}
 		}
 		
 	}
+    int nb_element = 0;
+    for (int i = 0; i < c->hauteur; ++i) {
+        for (int j = 0; j < c->ligne; ++j) {
+            if (c->tableau[i][j] == '-') {
+                nb_element++;
+            }
+        }
+        if (nb_element == c->ligne) {
+            retirer_colonne(c->tableau, i, c->hauteur);
+            c->hauteur -= 1;
+            i -= 1;
+        }
+        nb_element = 0;
+    }
+}
+
+//--------------------------------------------------------------------------------
+
+void retirer_colonne(char **array, int rowIndex,int ROWS) {
+    if (rowIndex < 0 || rowIndex >= ROWS) {
+        printf("Indice de ligne invalide.\n");
+        return;
+    }
+
+    free(array[rowIndex]); // Libère la mémoire de la ligne à supprimer
+
+    // Déplace les pointeurs vers les lignes suivantes vers le haut pour remplir l'espace de la ligne à supprimer
+    for (int i = rowIndex; i < ROWS - 1; ++i) {
+        array[i] = array[i + 1];
+    }
+
+    // Déplace le dernier pointeur vers NULL pour marquer la fin du tableau
+    array[ROWS - 1] = NULL;
 }
 
 //--------------------------------------------------------------------------------
