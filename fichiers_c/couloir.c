@@ -689,7 +689,21 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
 			}
 		}
 		if (last_occurence == 0){
-			*x_physique += c->hauteur - 2;
+			if (c->sequence[strlen(c->sequence) - 1] == 'S'){
+				int occurence = 0;
+				for(int j = strlen(c->sequence) - 1; j > 0; j--){
+					if (c->sequence[j] == 'S'){
+						occurence += 1;
+					}
+					else{
+						break;
+					}
+				}
+				*x_physique -= occurence + 1;
+			}
+			else{
+				*x_physique += c->hauteur - 2;
+			}
 		}
 		else{
 			*x_physique += 1;
