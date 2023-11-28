@@ -684,6 +684,8 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
     reversed[length] = '\0';
 	couloir *c_miroir = creer_couloir(1,reversed);
 	calcul_position_physique(c_miroir,x,y,x_physique,y_physique);
+	
+	
 	//calcul des cas particulier
 	if(c->sequence[strlen(c->sequence) - 1] != 'N'){
 		int last_occurence = 0;
@@ -695,35 +697,45 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
 				last_occurence = 0;
 			}
 		}
+		//on a finit sur un S
 		if (last_occurence == 0){
-			if (c->sequence[strlen(c->sequence) - 1] != 'N'){
-				int occurence = 0;
-				for(int j = strlen(c->sequence) - 1; j > 0; j--){
-					if (c->sequence[j] == 'S'){
-						occurence += 1;
-					}
-					else{
-						if (occurence != 0){
-							break;
-						}
-
-					}
+			int occurence = 0;
+			for(int j = strlen(c->sequence) - 1; j > 0; j--){
+				if (c->sequence[j] == 'S'){
+					occurence += 1;
 				}
-				if(c->sequence[strlen(c->sequence) - 1] == 'S'){
-					*x_physique -= occurence + 1;
+				else{
+					if (occurence != 0){
+						break;
+					}
+
+				}
+			}
+			int nb_depl_nord = count_occurence("N",c);
+			int nb_depl_west = count_occurence("W",c);
+			if(c->sequence[strlen(c->sequence) - 1] == 'S'){
+				*x_physique -= occurence + 1;
+			}
+			else{
+				if (nb_depl_nord == 0){
+					*x_physique += 1;
+					if (nb_depl_west == 0){
+						*y_physique = *y + c->ligne - 1;
+					}
 				}
 				else{
 					*x_physique += occurence - 1;
 				}
 			}
-			else{
-				*x_physique += c->hauteur - 2;
-			}
-		}
+		
+		}//on est sur du Nord
 		else{
 			*x_physique += 1;
+			//*x_physique += c->hauteur - 2;
 		}
 	}
+
+
 }
 
 //--------------------------------------------------------------------------------
