@@ -54,16 +54,16 @@ int ajouter_tableau_salles(a_salle_donjon une_salle, a_donjon mon_donjon){
 		mon_donjon->capacite_salles +=2;
     	mon_donjon->salles_donjon = realloc(mon_donjon->salles_donjon, mon_donjon->capacite_salles*sizeof(a_salle_donjon));
     	printf("réallocation dynamique car plus de place, capacité actuelle : %d\n",mon_donjon->capacite_salles);
-    	}
-
+    }
+	printf("capacité actuelle : %d\n",mon_donjon->capacite_salles);
     // Vérifier si la réallocation a réussi
     if (mon_donjon->salles_donjon == NULL) {
         fprintf(stderr, "Échec de la réallocation de mémoire pour le tableau dynamique de salles.\n");
         return 1;  // Code d'erreur
     }
     
-	mon_donjon->salles_donjon[mon_donjon->nbre_elements_salles++] = une_salle;
-	
+	mon_donjon->salles_donjon[mon_donjon->nbre_elements_salles] = une_salle;
+	mon_donjon->nbre_elements_salles++;
     return 0;
 }
 

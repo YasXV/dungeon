@@ -30,6 +30,8 @@ a_salle s2 = creer_salle(14,9);
 ajouter_entite(MONSTRE,s1, 8,6,0,1);
 ajouter_entite(AUTEL,s1,10,13,1,1);
 ajouter_entite(MONSTRE,s1,12,15,0,1);
+ajouter_entite(MONSTRE,s2,5,3,0,1);
+ajouter_salle(d1,s2,35,20,0);
 ajouter_salle(d1, s1, 4,8,0);
 affiche_salle(d1->salles_donjon[0]->salle);
 ajouter_entite_donjon(COFFRE,d1,16,20,1,0);
@@ -39,7 +41,7 @@ ajouter_entite_donjon(COFFRE, d1, 7, 12, 0, 1);
 affiche_salles_donjon(d1);
 affiche_donjon(d1);
 sauvegarder_donjon(d1);
-a_donjon d2 = recup_donjon("donjons/donjon1.txt");
+a_donjon d2 = recup_donjon("donjons/donjon87.txt");
 affiche_donjon(d2);
 return 0;
 }

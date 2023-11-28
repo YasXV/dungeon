@@ -9,9 +9,13 @@
 //ajouter une entité dans une salle, par défaut le forcage est à 0! c'est à dire que si il y a dèjà une entité en x,y , on ne l'écrase pas !
 void ajouter_entite(entite_id mon_entite_id, a_salle ma_salle, int x, int y, int interaction, int forcage){
 	
+	if ((x <= 0) || (x > ma_salle->longueur) || (y <= 0) || (y > ma_salle->largeur)) {
+		fprintf(stderr, "Erreur : les coordonnées de l'entité sont en dehors de la salle.\n");
+		return;
+	}
+
 	// calcul de entite_presente, qui vérifie si il y a déjà une entité présente ou non à la position x,y
 	int present = verifier_entite_presente(ma_salle, x, y);
-	
 	// calcul de verifier_possibilite_ajout, retourne 0 si l'ajout de l'entité est possible à cette postion dans la salle 	
 	int possible = verifier_possibilite_ajout(mon_entite_id, ma_salle, x, y, interaction);
 
@@ -20,14 +24,13 @@ void ajouter_entite(entite_id mon_entite_id, a_salle ma_salle, int x, int y, int
 		if(possible==0){
 			//création de l'entité
 			a_entite nouvelle_entite = creer_entite(mon_entite_id, x, y, interaction);
-			
 			// ajout de cette entité dans le tableau d'entité lié à la salle
 			ajouter_tableau_entite(nouvelle_entite, ma_salle);
+
 			// ajout du symbole de l'entité dans l'enceinte de la salle
 			ma_salle->enceinte[y][x]=nouvelle_entite->symbole;
-			}
 		}
-	
+	}
 	//cas où il y a dèjà une entité en x,y
 	else {
 		if(possible==0){
@@ -55,7 +58,7 @@ int verifier_entite_presente(a_salle ma_salle, int x, int y){
 	for(int i =0;i<ma_salle->nbre_elements; i++){
 		if(ma_salle->entites_contenu[i]->x==x && ma_salle->entites_contenu[i]->y==y){
 			return i;
-			}    
+		}
 	}
 	return -1;
 }
