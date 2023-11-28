@@ -95,6 +95,7 @@ void fill_couloir(couloir *c){
 	int x_phy = 0;
 	int y_phy = 0;
 	start_placement(c,&x,&y);
+
 	int longueurSequence = strlen(c->sequence);
 	int first_y;
 	int first_x;
@@ -128,6 +129,7 @@ void fill_couloir(couloir *c){
         }
     }
 	clean_tableau(c);
+	
 	if (first_x > 0){
 		if(c->sequence[0] == 'S'){
 			c->tableau[first_x - 1][first_y] = '-';
@@ -146,7 +148,7 @@ void fill_couloir(couloir *c){
 			c->tableau[final_x][final_y + 1] = '-';
 		}
 		if (c->sequence[strlen(c->sequence) - 1] == 'N'){
-			if (final_x != 0){
+			if (final_x > 0){
 				c->tableau[final_x - 1][final_y] = '-';
 			}
 		}
@@ -432,7 +434,12 @@ void count_max_ligne(couloir *c){
 				gain = 3;
 			}
 			else{
-				gain = 3;
+				if (ligne_est == 0){
+					gain = 1;
+				}
+				else{
+					gain = 3;
+				}
 			}
 		}
 		else{
@@ -677,7 +684,7 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
     reversed[length] = '\0';
 	couloir *c_miroir = creer_couloir(1,reversed);
 	calcul_position_physique(c_miroir,x,y,x_physique,y_physique);
-	//*y_physique += c->ligne - 3;
+	//calcul des cas particulier
 	if(c->sequence[strlen(c->sequence) - 1] != 'N'){
 		int last_occurence = 0;
 		for (int i = 0; i < strlen(c->sequence); i++){
@@ -689,17 +696,25 @@ void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_
 			}
 		}
 		if (last_occurence == 0){
-			if (c->sequence[strlen(c->sequence) - 1] == 'S'){
+			if (c->sequence[strlen(c->sequence) - 1] != 'N'){
 				int occurence = 0;
 				for(int j = strlen(c->sequence) - 1; j > 0; j--){
 					if (c->sequence[j] == 'S'){
 						occurence += 1;
 					}
 					else{
-						break;
+						if (occurence != 0){
+							break;
+						}
+
 					}
 				}
-				*x_physique -= occurence + 1;
+				if(c->sequence[strlen(c->sequence) - 1] == 'S'){
+					*x_physique -= occurence + 1;
+				}
+				else{
+					*x_physique += occurence - 1;
+				}
 			}
 			else{
 				*x_physique += c->hauteur - 2;
