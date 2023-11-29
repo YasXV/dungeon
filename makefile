@@ -14,6 +14,8 @@ MAIN_OBJ = $(OBJ_DIR)/main.o
 donjon: $(OBJS) $(MAIN_OBJ)
 	gcc $^ -o $(BIN_DIR)/$@ -lm
 	$(BIN_DIR)/$@
+	rm $(OBJ_DIR)/*.o
+	rm $(BIN_DIR)/$@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	gcc -o $@ -c $< -I$(HEADER)
