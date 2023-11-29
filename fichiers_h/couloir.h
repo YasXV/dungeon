@@ -15,6 +15,10 @@ int largeur; //largeur des couloirs
 int ligne; //taille de la ligne
 char **tableau;//tableau qui contient le couloir
 int id_couloir;//id unique d'un couloir
+int x_entree;//coordonnée x de l'entrée du couloir
+int y_entree;//coordonnée y de l'entrée du couloir
+int x_sortie;//coordonnée x de la sortie du couloir
+int y_sortie;//coordonnée y de la sortie du couloir
 }couloir;
 
 typedef couloir* a_couloir;
@@ -29,19 +33,7 @@ void affiche_couloir(couloir *c);
 
 //--------------------------------------------------------------------------------
 
-void fill_couloir(couloir *c);
-
-//--------------------------------------------------------------------------------
-
-int count_occurence(char *direction,couloir *c);
-
-//--------------------------------------------------------------------------------
-
-void count_max_length(couloir *c);
-
-//--------------------------------------------------------------------------------
-
-void count_max_ligne(couloir *c);
+void remplacer_couloir(couloir *c);
 
 //--------------------------------------------------------------------------------
 
@@ -49,11 +41,15 @@ void create_tableau(couloir *c);
 
 //--------------------------------------------------------------------------------
 
-void start_placement(couloir *c,int *x,int *y);
+void nettoyer_tableau(couloir *c);
 
 //--------------------------------------------------------------------------------
 
-void clean_tableau(couloir *c);
+void retirer_colonne(char **array, int colIndex, int ROWS, int COLS);
+
+//--------------------------------------------------------------------------------
+
+void retirer_ligne(char **array, int rowIndex/*indice de la ligne*/,int ROWS /*nombre de colonne*/);
 
 //--------------------------------------------------------------------------------
 
@@ -64,16 +60,7 @@ int sauvegarder_couloir(couloir *c);
 a_couloir recuperer_couloir(char *nom_fichier);
 
 //--------------------------------------------------------------------------------
-
-void calcul_position_physique(couloir *c, int *x, int *y, int *x_physique, int *y_physique);
-
-//--------------------------------------------------------------------------------
-
-void calcul_position_sortie(couloir *c, int *x, int *y, int *x_physique, int *y_physique);
-
-//--------------------------------------------------------------------------------
-
-void retirer_colonne(char **array, int rowIndex/*indice de la ligne*/,int ROWS /*nombre de colonne*/);
+void trouver_debut_fin_couloir(couloir *c);
 
 //--------------------------------------------------------------------------------
 #endif 
