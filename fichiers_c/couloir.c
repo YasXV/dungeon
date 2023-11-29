@@ -13,13 +13,12 @@
 //--------------------------------------------------------------------------------
 
 a_couloir creer_couloir(int largeur, const char *sequence){
-	
 	//allocation de la mémoire pour un couloir
 	a_couloir c = malloc(sizeof(couloir));
 	if (c == NULL) {
         printf("échec de l'allocation de mémoire d'un couloir");
         return NULL;
-    	}
+    }
     
     //dimension
 	c->largeur = largeur;
@@ -94,8 +93,8 @@ void remplacer_couloir(couloir *c){
 	int row = c->hauteur / 2; // Ligne initiale
 	int col = c->ligne / 2; // Colonne initiale
 
-	c->x_entree = row;
-	c->y_entree = col;
+	c->y_entree = row;
+	c->x_entree = col;
 	c->tableau[row][col] = 'E'; // Point de départ
 
 	for (int i = 0; i<=strlen(c->sequence) - 1; ++i) {
@@ -129,8 +128,8 @@ void remplacer_couloir(couloir *c){
 		}
 	}
 
-	c->x_sortie = row;
-	c->y_sortie = col;	
+	c->y_sortie = row;
+	c->x_sortie = col;	
 }
 
 //--------------------------------------------------------------------------------
@@ -176,30 +175,28 @@ void nettoyer_tableau(couloir *c) {
 	}
 	int length = strlen(c->sequence);
 	if (c->sequence[length - 1] == 'E'){
-		c->tableau[c->x_sortie][c->y_sortie + 1] = '-';
-		c->tableau[c->x_sortie - 1][c->y_sortie + 1] = '-';
-		c->tableau[c->x_sortie + 1][c->y_sortie + 1] = '-';
+		c->tableau[c->y_sortie][c->x_sortie + 1] = '-';
+		c->tableau[c->y_sortie - 1][c->x_sortie + 1] = '-';
+		c->tableau[c->y_sortie + 1][c->x_sortie + 1] = '-';
 	}
 	else if (c->sequence[length - 1] == 'W'){
-		c->tableau[c->x_sortie][c->y_sortie - 1] = '-';
-		c->tableau[c->x_sortie - 1][c->y_sortie - 1] = '-';
-		c->tableau[c->x_sortie + 1][c->y_sortie - 1] = '-';
+		c->tableau[c->y_sortie][c->x_sortie - 1] = '-';
+		c->tableau[c->y_sortie - 1][c->x_sortie - 1] = '-';
+		c->tableau[c->y_sortie + 1][c->x_sortie - 1] = '-';
 	}
 	else if (c->sequence[length - 1] == 'N'){
-		c->tableau[c->x_sortie - 1][c->y_sortie] = '-';
-		c->tableau[c->x_sortie - 1][c->y_sortie - 1] = '-';
-		c->tableau[c->x_sortie - 1][c->y_sortie + 1] = '-';
+		c->tableau[c->y_sortie - 1][c->x_sortie] = '-';
+		c->tableau[c->y_sortie - 1][c->x_sortie - 1] = '-';
+		c->tableau[c->y_sortie - 1][c->x_sortie + 1] = '-';
 	}
 	else if (c->sequence[length - 1] == 'S'){
-		c->tableau[c->x_sortie + 1][c->y_sortie] = '-';
-		c->tableau[c->x_sortie + 1][c->y_sortie - 1] = '-';
-		c->tableau[c->x_sortie + 1][c->y_sortie + 1] = '-';
+		c->tableau[c->y_sortie + 1][c->x_sortie] = '-';
+		c->tableau[c->y_sortie + 1][c->x_sortie - 1] = '-';
+		c->tableau[c->y_sortie + 1][c->x_sortie + 1] = '-';
 	}
 
 	//suppression des lignes et colonnes inutiles : 
 	int nb_element = 0;
-	int old_hauteur = c->hauteur;
-	int position_depart_trouvee = 0;
 	for (int i = 0; i < c->hauteur; ++i) {
 		for (int j = 0; j < c->ligne; ++j) {
 			if (c->tableau[i][j] == '-') {
@@ -209,19 +206,12 @@ void nettoyer_tableau(couloir *c) {
 		if (nb_element == c->ligne) {
 			retirer_ligne(c->tableau, i, c->hauteur);
 			c->hauteur -= 1;
-			if (i < c->hauteur / 2){
-				c->x_entree -= 1;
-			}
 			i -= 1;
 		}
 		nb_element = 0;
 	}
-	if (c->x_entree < 0){
-		c->x_entree = 0;
-	}
 	
 	nb_element = 0;
-	int old_ligne = c->ligne;
 
 	for (int i = 0; i < c->ligne; ++i) {
 		for (int j = 0; j < c->hauteur; ++j) {
@@ -290,8 +280,8 @@ void trouver_debut_fin_couloir(couloir *c){
     for (int i = 0; i < c->hauteur; ++i) {
         for (int j = 0; j < c->ligne; ++j) {
             if (c->tableau[i][j] == 'E') {
-                c->x_entree = i;
-                c->y_entree = j;
+                c->y_entree = i;
+                c->x_entree = j;
                 break;
             }
         }
@@ -301,8 +291,8 @@ void trouver_debut_fin_couloir(couloir *c){
     for (int i = 0; i < c->hauteur; ++i) {
         for (int j = 0; j < c->ligne; ++j) {
             if (c->tableau[i][j] == 'S') {
-                c->x_sortie = i;
-                c->y_sortie = j;
+                c->y_sortie = i;
+                c->x_sortie = j;
                 return; // Sortir dès que la sortie est trouvée
             }
         }
