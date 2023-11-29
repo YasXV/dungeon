@@ -22,7 +22,7 @@
 //initialisation des id
 #define l 1// n est la largeur des couloirs, ici ils seront définis à 1, mais c'est tout a fait possible d'avoir une largeur personalisée
 int main(){
-
+/*
 a_donjon d1 = creer_donjon(78,59);
 affiche_donjon(d1);
 a_salle s1 = creer_salle(22,17);
@@ -41,8 +41,16 @@ ajouter_entite_donjon(COFFRE, d1, 7, 12, 0, 1);
 affiche_salles_donjon(d1);
 affiche_donjon(d1);
 sauvegarder_donjon(d1);
-a_donjon d2 = recup_donjon("donjons/donjon87.txt");
-affiche_donjon(d2);
+a_donjon d2 = recup_donjon("donjons/donjon2.txt");
+affiche_donjon(d2);*/
+a_couloir c1 = creer_couloir(1,"WWWWSSSEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+affiche_couloir(c1);
+sauvegarder_couloir(c1);
+
+printf(" x_entree : %d\n",c1->x_entree);
+printf(" y_entree : %d\n",c1->y_entree);
+printf(" x_sortie : %d\n",c1->x_sortie);
+printf(" y_sortie : %d\n",c1->y_sortie);
 return 0;
 }
 

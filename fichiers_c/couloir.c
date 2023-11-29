@@ -28,8 +28,8 @@ a_couloir creer_couloir(int largeur, const char *sequence){
 	c->sequence = malloc(strlen(sequence) + 1);
 	strcpy(c->sequence,sequence);
 
-	c->hauteur = 50;
-	c->ligne = 50;
+	c->hauteur = strlen(c->sequence) * 2 + 1;
+	c->ligne = strlen(c->sequence) * 2 + 1;
 
 	//Allouer de la mémoire pour les lignes
     c->tableau = (char**)malloc(c->hauteur * sizeof(char*));
